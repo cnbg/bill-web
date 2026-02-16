@@ -1,15 +1,13 @@
 export interface AuthUser {
-  id: number
-  firstName: string
-  lastName: string
+  id: string
+  name: string
   email: string
-  photo?: string,
-  org?: Org,
-  roles: string[],
+  photo?: string
+  org_id?: string
+  org_name: string
   type: string
-  lang: string
+  locale: string
   theme: string
-  perms: string[]
 }
 
 export interface Org {
@@ -17,13 +15,8 @@ export interface Org {
   name: string
 }
 
-export interface LoginRequest {
-  email: string
-  password: string
-}
-
 export interface LoginResponse {
-  accessToken: string
-  refreshToken: string
+  access_token: string
+  refresh_token: string
   user: AuthUser
 }

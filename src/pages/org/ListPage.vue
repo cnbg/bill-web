@@ -5,8 +5,8 @@ import { onMounted, ref } from 'vue'
 
 const orgs = ref<Org[]>([])
 onMounted(async () => {
-  const { data } = await useAuthHttp('/v1/org/list').get().json()
-  orgs.value = data.value.data as Org[]
+  const { data } = await useAuthHttp('/org/list').get().json()
+  orgs.value = data.value as Org[]
 })
 </script>
 
@@ -31,5 +31,4 @@ onMounted(async () => {
 </template>
 
 <style>
-
 </style>

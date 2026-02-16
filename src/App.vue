@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'primevue/usetoast'
+import { useEventListener } from '@vueuse/core'
 import { useAuthStore } from '@/stores'
 import { EventName } from '@/enums'
 import type { ToastMessageOptions } from 'primevue/toast'
@@ -9,9 +10,8 @@ const dev = import.meta.env.DEV
 const { t } = useI18n()
 const toast = useToast()
 const auth = useAuthStore()
-auth.sync()
 
-document.addEventListener(EventName.SHOW_TOAST, (event: CustomEvent<ToastMessageOptions>) => {
+useEventListener(document, EventName.SHOW_TOAST, (event: CustomEvent<ToastMessageOptions>) => {
   toast.add({
     severity: event.detail.severity || 'info',
     summary: t(event.detail.summary || ''),

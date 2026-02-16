@@ -14,7 +14,10 @@ const login = async () => {
 
 onBeforeMount(async () => {
   auth.username = await cookie.get('username') || ''
-  auth.password = 'User@1000'
+
+  if (import.meta.env.DEV) {
+    auth.password = 'User@1000'
+  }
 })
 </script>
 

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useFetch } from '@vueuse/core'
 import { useAuthHttp } from '@/composables'
 import { cookie, getLocale, getTheme, goto, isValidEmail, parseJwt } from '@/utils'
-import type { AuthUser, LoginRequest, LoginResponse } from '@/types'
+import type { AuthUser, LoginResponse } from '@/types'
 
 interface AuthState {
   user: AuthUser
@@ -13,13 +13,13 @@ interface AuthState {
   error: string
   locale: string
   theme: string
-  jwtExp: number
+  jwt_exp: number
   locales: { key: string; name: string }[]
 }
 
-const baseUrl = import.meta.env.VITE_API_URL!
+const baseUrl = import.meta.env.VITE_API_URL! + '/v1'
 
-export const useAuthStore = defineStore('auth-store', {
+const useAuthStore = defineStore('auth-store', {
   state: (): AuthState => ({
     user: {} as AuthUser,
     username: '',
@@ -29,22 +29,21 @@ export const useAuthStore = defineStore('auth-store', {
     error: '',
     locale: getLocale(),
     theme: getTheme(),
-    jwtExp: 0,
+    jwt_exp: 0,
     locales: [
       { key: 'ru', name: 'Русский' },
       { key: 'en', name: 'English' },
     ],
   }),
   getters: {
-    isAuth: (state: AuthState) => state.jwtExp * 1000 > Date.now(),
-    name: (state: AuthState): string => `${state.user?.firstName} ${state.user?.lastName}`.trim(),
+    isAuth: (state: AuthState) => state.jwt_exp * 1000 > Date.now(),
   },
   actions: {
     async profile() {
       this.loading = true
       this.errors = []
 
-      const { data, error } = await useAuthHttp<AuthUser>('/v1/auth/profile').get().json()
+      const { data, error } = await useAuthHttp<AuthUser>('/auth/profile').get().json()
 
       if (error.value) {
         this.errors.push(error.value.message || 'error_fetching_data')
@@ -52,7 +51,8 @@ export const useAuthStore = defineStore('auth-store', {
         this.user = data.value as AuthUser
       }
 
-      await this.setLocale(this.user.lang)
+      this.jwt_exp = parseJwt(await cookie.get('access') || '')?.exp ?? 0
+      await this.setLocale(this.user.locale)
       await this.setTheme(this.user.theme)
 
       this.loading = false
@@ -76,14 +76,15 @@ export const useAuthStore = defineStore('auth-store', {
         return
       }
 
-      const { data, error } = await useFetch<LoginResponse>(baseUrl + '/v1/auth/login').post({
+      const { data, error } = await useFetch<LoginResponse>(baseUrl + '/auth/login').post({
         username: this.username,
         password: this.password,
-      } as LoginRequest).json()
+      }).json()
 
       if (error.value) {
         this.errors.push(error.value.message || 'invalid_username_or_password')
       } else if (data.value) {
+        cookie.set('username', this.username, { days: 365 })
         await this.setData(data.value)
       }
 
@@ -93,14 +94,14 @@ export const useAuthStore = defineStore('auth-store', {
       this.loading = true
       this.errors = []
 
-      const refreshToken = await cookie.get('refresh')
-      if (!refreshToken) {
+      const refresh_token = await cookie.get('refresh')
+      if (!refresh_token) {
         this.loading = false
         await this.logout()
         return
       }
-      const { data, error } = await useFetch<LoginResponse>(baseUrl + '/v1/auth/refresh').post({
-        refresh: refreshToken,
+      const { data, error } = await useFetch<LoginResponse>(baseUrl + '/auth/refresh').post({
+        refresh_token: refresh_token,
       }).json()
 
       if (error.value) {
@@ -114,9 +115,6 @@ export const useAuthStore = defineStore('auth-store', {
     async logout() {
       this.$reset()
 
-      //const refreshToken = await cookie.get('refresh')
-      //await useFetch('/auth/revoke').post({ refresh: refreshToken })
-
       await this.cleanCookies()
       goto('/auth/login')
     },
@@ -125,18 +123,15 @@ export const useAuthStore = defineStore('auth-store', {
 
       await this.cleanCookies()
 
-      const accessToken = data.accessToken
-      const refreshToken = data.refreshToken
-      this.jwtExp = parseJwt(accessToken)?.exp ?? 0
-      if (accessToken || refreshToken) {
-        await this.setCookies(accessToken, refreshToken)
+      const access_token = data.access_token
+      const refresh_token = data.refresh_token
+      this.jwt_exp = parseJwt(access_token)?.exp ?? 0
+      if (access_token || refresh_token) {
+        cookie.set('access', access_token, { days: 1 })
+        cookie.set('refresh', refresh_token, { days: 90 })
       } else {
         this.errors.push('error_fetching_data')
       }
-    },
-    async setCookies(accessToken: string, refreshToken: string) {
-      cookie.set('access', accessToken, { days: 1 })
-      cookie.set('refresh', refreshToken, { days: 90 })
     },
     async cleanCookies() {
       cookie.delete('access')
@@ -147,7 +142,7 @@ export const useAuthStore = defineStore('auth-store', {
         this.locale = ['ru', 'en'].find(l => l === locale) ?? this.locale
       }
       localStorage.setItem('locale', this.locale)
-      if (save) await useAuthHttp('/v1/auth/update').put({ lang: this.locale }).json()
+      if (save) await useAuthHttp('/auth/update').put({ locale: this.locale }).json()
     },
     async setTheme(theme?: string, save = false) {
       if (theme !== undefined) {
@@ -160,12 +155,18 @@ export const useAuthStore = defineStore('auth-store', {
       } else {
         document.documentElement.classList.remove('p-dark')
       }
-      if (save) await useAuthHttp('/v1/auth/update').put({ theme: this.theme }).json()
+      if (save) await useAuthHttp('/auth/update').put({ theme: this.theme }).json()
     },
     async sync() {
-      this.jwtExp = parseJwt(await cookie.get('access') || '')?.exp ?? 0
+      this.jwt_exp = parseJwt(await cookie.get('access') || '')?.exp ?? 0
       await this.setLocale()
       await this.setTheme()
+
+      if (window.location.pathname.includes('/auth/login')) return
+
+      await this.profile()
     },
   },
 })
+
+export default useAuthStore

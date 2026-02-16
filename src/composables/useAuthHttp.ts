@@ -3,14 +3,14 @@ import { createFetch } from '@vueuse/core'
 import { useAuthStore } from '@/stores'
 
 const useAuthHttp = createFetch({
-  baseUrl: import.meta.env.VITE_API_URL!,
+  baseUrl: import.meta.env.VITE_API_URL! + '/v1',
   options: {
     async beforeFetch({ url, options, cancel }) {
-      const accessToken = await cookie.get('access')
-      const refreshToken = await cookie.get('refresh')
-      if (!accessToken) {
+      const access_token = await cookie.get('access')
+      const refresh_token = await cookie.get('refresh')
+      if (!access_token) {
         cancel()
-        if (refreshToken) {
+        if (refresh_token) {
           await refresh()
         } else {
           goto('/auth/login')
@@ -19,7 +19,7 @@ const useAuthHttp = createFetch({
 
       options.headers = {
         ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${access_token}`,
       }
 
       return { url, options, cancel }
@@ -40,4 +40,4 @@ async function refresh() {
   await auth.refresh()
 }
 
-export { useAuthHttp }
+export default useAuthHttp

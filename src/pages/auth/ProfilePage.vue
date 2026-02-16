@@ -25,7 +25,7 @@ onMounted(async () => {
           <Avatar v-if="auth.user.photo" :image="auth.user.photo" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
           <Avatar v-else icon="pi pi-user" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
           <div>
-            <div class="font-bold lg:text-3xl text-xl">{{ auth.name }}</div>
+            <div class="font-bold lg:text-3xl text-xl">{{ auth.user.name }}</div>
             <div class="text-gray-500 lg:text-lg text-md">{{ auth.user.email }}</div>
           </div>
         </div>
@@ -35,13 +35,7 @@ onMounted(async () => {
         <div>
           <h1 class="text-2xl font-bold mb-1">{{ $t('organization') }}</h1>
           <div>
-            {{ auth.user.org?.name }}
-          </div>
-        </div>
-        <div>
-          <h1 class="text-2xl font-bold mb-1">{{ $t('roles') }}</h1>
-          <div v-for="(role, index) in auth.user.roles" :key="index">
-            {{ role }}
+            {{ auth.user.org_name }}
           </div>
         </div>
       </div>
