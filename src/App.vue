@@ -5,6 +5,7 @@ import { useEventListener } from '@vueuse/core'
 import { useAuthStore } from '@/stores'
 import { EventName } from '@/enums'
 import type { ToastMessageOptions } from 'primevue/toast'
+import { onBeforeMount } from 'vue'
 
 const dev = import.meta.env.DEV
 const { t } = useI18n()

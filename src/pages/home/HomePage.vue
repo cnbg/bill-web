@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores'
+
+const auth = useAuthStore()
 </script>
 
 <template>
@@ -10,7 +13,8 @@
       <hr class="my-4" />
       <div class="flex flex-wrap gap-4">
         <Button @click="$router.push({name: 'auth.profile'})" outlined severity="contrast" :label="$t('profile')" />
-        <Button @click="$router.push({name: 'org.list'})" outlined severity="contrast" :label="$t('organizations')" />
+        <Button @click="$router.push({name: 'org.list'})" v-show="auth.hasPerm('org.view')"
+                outlined severity="contrast" :label="$t('orgs')" />
       </div>
     </div>
   </MainLayout>

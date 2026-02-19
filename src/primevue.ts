@@ -31,6 +31,7 @@ import TabList from 'primevue/tablist'
 import TabPanel from 'primevue/tabpanel'
 import TabPanels from 'primevue/tabpanels'
 import Tabs from 'primevue/tabs'
+import Tag from 'primevue/tag'
 import Toast from 'primevue/toast'
 import ToggleSwitch from 'primevue/toggleswitch'
 
@@ -62,6 +63,7 @@ app.component('TabList', TabList)
 app.component('TabPanel', TabPanel)
 app.component('TabPanels', TabPanels)
 app.component('Tabs', Tabs)
+app.component('Tag', Tag)
 app.component('Toast', Toast)
 app.component('ToggleSwitch', ToggleSwitch)
 

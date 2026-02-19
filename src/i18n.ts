@@ -18,7 +18,8 @@ const i18n = createI18n({
     ru: ru,
     en: en,
   },
-  globalInjection: true,
+  useScope: 'global',
+  globalInjection: true
 })
 
 export default i18n

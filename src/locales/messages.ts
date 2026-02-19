@@ -83,8 +83,12 @@ const messages: Messages = {
     en: 'Language',
   },
   name: {
-    ru: 'Ваше имя',
+    ru: 'Имя',
     en: 'Name',
+  },
+  title: {
+    ru: 'Название',
+    en: 'Title',
   },
   not_found: {
     ru: 'Не найдено',
@@ -138,11 +142,11 @@ const messages: Messages = {
     ru: 'Неверное имя пользователя или пароль',
     en: 'Invalid username or password',
   },
-  organizations: {
+  orgs: {
     ru: 'Организации',
     en: 'Organizations',
   },
-  organization: {
+  org: {
     ru: 'Организация',
     en: 'Organization',
   },
@@ -153,6 +157,14 @@ const messages: Messages = {
   role: {
     ru: 'Роль',
     en: 'Role',
+  },
+  select_org: {
+    ru: 'Выберите организацию',
+    en: 'Select organization',
+  },
+  switch_org: {
+    ru: 'Сменить организацию',
+    en: 'Switch organization',
   },
 }
 

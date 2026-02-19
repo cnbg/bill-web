@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores'
+import { Org } from '@/types'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+
+const currentOrg = ref<Org>(auth.user.org as Org)
 
 const logout = async () => {
   if (confirm(t('are_you_sure'))) {
@@ -33,23 +36,34 @@ onMounted(async () => {
       </div>
       <div class="flex flex-col gap-5">
         <div>
-          <h1 class="text-2xl font-bold mb-1">{{ $t('organization') }}</h1>
-          <div>
-            {{ auth.user.org_name }}
+          <h1 class="text-lg font-bold mb-2">{{ $t('org') }}</h1>
+          <div class="flex flex-wrap gap-2 items-center">
+            <Select
+              v-model="currentOrg" :options="auth.user.orgs" optionLabel="name"
+              :placeholder="$t('select_org')" class="min-w-40" size="small" />
+            <Button
+              :label="$t('switch_org')" severity="secondary" outlined size="small"
+              @click="auth.setOrg(currentOrg, true)" :disabled="currentOrg.id == auth.user.org?.id" />
+          </div>
+        </div>
+        <div>
+          <h1 class="text-lg font-bold mb-2">{{ $t('roles') }}</h1>
+          <div class="flex flex-wrap gap-2">
+            <Tag v-for="(role,index) in auth.user.roles" :key="index" :value="role" severity="secondary" />
           </div>
         </div>
       </div>
-      <div class="flex flex-wrap gap-5">
-        <h3 class="w-full">{{ $t('language') }}</h3>
+      <div class="flex flex-wrap gap-4">
+        <h1 class="w-full">{{ $t('language') }}</h1>
         <Button v-for="locale in auth.locales" @click="auth.setLocale(locale.key, true); $i18n.locale = locale.key"
-                :key="locale.key" :label="locale.name" outlined
+                :key="locale.key" :label="locale.name" outlined size="small"
                 :severity="locale.key === auth.locale ? 'primary' : 'secondary'"
                 :icon="locale.key === auth.locale ? 'pi pi-check' : 'pi pi-minus'" />
       </div>
-      <div class="flex flex-wrap gap-5">
-        <h3 class="w-full">{{ $t('theme') }}</h3>
+      <div class="flex flex-wrap gap-4">
+        <h1 class="w-full">{{ $t('theme') }}</h1>
         <Button v-for="theme in ['dark', 'light']" :label="$t(theme)"
-                @click="auth.setTheme(theme, true)" outlined
+                @click="auth.setTheme(theme, true)" outlined size="small"
                 :severity="auth.theme === theme ? 'primary' : 'secondary'"
                 :icon="auth.theme === theme ? 'pi pi-check' : 'pi pi-minus'"
         />

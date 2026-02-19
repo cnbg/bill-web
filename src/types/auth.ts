@@ -3,11 +3,13 @@ export interface AuthUser {
   name: string
   email: string
   photo?: string
-  org_id?: string
-  org_name: string
   type: string
   locale: string
   theme: string
+  org: Org
+  orgs: Org[]
+  roles: string[]
+  perms: string[]
 }
 
 export interface Org {

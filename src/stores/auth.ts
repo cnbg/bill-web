@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { useFetch } from '@vueuse/core'
 import { useAuthHttp } from '@/composables'
 import { cookie, getLocale, getTheme, goto, isValidEmail, parseJwt } from '@/utils'
-import type { AuthUser, LoginResponse } from '@/types'
+import type { AuthUser, LoginResponse, Org } from '@/types'
 
 interface AuthState {
   user: AuthUser
@@ -84,7 +84,7 @@ const useAuthStore = defineStore('auth-store', {
       if (error.value) {
         this.errors.push(error.value.message || 'invalid_username_or_password')
       } else if (data.value) {
-        cookie.set('username', this.username, { days: 365 })
+        await cookie.set('username', this.username, { days: 365 })
         await this.setData(data.value)
       }
 
@@ -127,22 +127,38 @@ const useAuthStore = defineStore('auth-store', {
       const refresh_token = data.refresh_token
       this.jwt_exp = parseJwt(access_token)?.exp ?? 0
       if (access_token || refresh_token) {
-        cookie.set('access', access_token, { days: 1 })
-        cookie.set('refresh', refresh_token, { days: 90 })
+        await cookie.set('access', access_token, { days: 1 })
+        await cookie.set('refresh', refresh_token, { days: 90 })
       } else {
         this.errors.push('error_fetching_data')
       }
     },
     async cleanCookies() {
-      cookie.delete('access')
-      cookie.delete('refresh')
+      await cookie.delete('access')
+      await cookie.delete('refresh')
+    },
+    async setOrg(org: Org, save = false) {
+      this.loading = true
+      this.errors = []
+
+      if (save) {
+        const { data, error } = await useAuthHttp<LoginResponse>('/auth/update').put({ org_id: org.id }).json()
+
+        if (error.value) {
+          this.errors.push(error.value.message || 'error_fetching_data')
+        } else if (data.value) {
+          await this.setData(data.value)
+        }
+      }
+
+      this.loading = false
     },
     async setLocale(locale?: string, save = false) {
       if (locale !== undefined) {
         this.locale = ['ru', 'en'].find(l => l === locale) ?? this.locale
       }
       localStorage.setItem('locale', this.locale)
-      if (save) await useAuthHttp('/auth/update').put({ locale: this.locale }).json()
+      if (save) await useAuthHttp<LoginResponse>('/auth/update').put({ locale: this.locale }).json()
     },
     async setTheme(theme?: string, save = false) {
       if (theme !== undefined) {
@@ -155,7 +171,7 @@ const useAuthStore = defineStore('auth-store', {
       } else {
         document.documentElement.classList.remove('p-dark')
       }
-      if (save) await useAuthHttp('/auth/update').put({ theme: this.theme }).json()
+      if (save) await useAuthHttp<LoginResponse>('/auth/update').put({ theme: this.theme }).json()
     },
     async sync() {
       this.jwt_exp = parseJwt(await cookie.get('access') || '')?.exp ?? 0
@@ -165,6 +181,12 @@ const useAuthStore = defineStore('auth-store', {
       if (window.location.pathname.includes('/auth/login')) return
 
       await this.profile()
+    },
+    hasPerm(...perm: string[]) {
+      if (!this.isAuth) return false
+      // if (this.user.type === 'system') return true
+
+      return perm.some(p => this.user.perms.includes(p))
     },
   },
 })
