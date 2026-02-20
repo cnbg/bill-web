@@ -43,7 +43,7 @@ const useAuthStore = defineStore('auth-store', {
       this.loading = true
       this.errors = []
 
-      const { data, error } = await useAuthHttp<AuthUser>('/auth/profile').get().json()
+      const { data, error } = await useAuthHttp<AuthUser>(baseUrl + '/auth/profile').get().json()
 
       if (error.value) {
         this.errors.push(error.value.message || 'error_fetching_data')
@@ -142,7 +142,7 @@ const useAuthStore = defineStore('auth-store', {
       this.errors = []
 
       if (save) {
-        const { data, error } = await useAuthHttp<LoginResponse>('/auth/update').put({ org_id: org.id }).json()
+        const { data, error } = await useAuthHttp<LoginResponse>(baseUrl + '/auth/update').put({ org_id: org.id }).json()
 
         if (error.value) {
           this.errors.push(error.value.message || 'error_fetching_data')
@@ -158,7 +158,7 @@ const useAuthStore = defineStore('auth-store', {
         this.locale = ['ru', 'en'].find(l => l === locale) ?? this.locale
       }
       localStorage.setItem('locale', this.locale)
-      if (save) await useAuthHttp<LoginResponse>('/auth/update').put({ locale: this.locale }).json()
+      if (save) await useAuthHttp<LoginResponse>(baseUrl + '/auth/update').put({ locale: this.locale }).json()
     },
     async setTheme(theme?: string, save = false) {
       if (theme !== undefined) {
@@ -171,7 +171,7 @@ const useAuthStore = defineStore('auth-store', {
       } else {
         document.documentElement.classList.remove('p-dark')
       }
-      if (save) await useAuthHttp<LoginResponse>('/auth/update').put({ theme: this.theme }).json()
+      if (save) await useAuthHttp<LoginResponse>(baseUrl + '/auth/update').put({ theme: this.theme }).json()
     },
     async sync() {
       this.jwt_exp = parseJwt(await cookie.get('access') || '')?.exp ?? 0
@@ -186,7 +186,7 @@ const useAuthStore = defineStore('auth-store', {
       if (!this.isAuth) return false
       // if (this.user.type === 'system') return true
 
-      return perm.some(p => this.user.perms.includes(p))
+      return perm.some(p => this.user?.perms.includes(p))
     },
   },
 })

@@ -1,5 +1,5 @@
 export interface Org {
-  id: number
+  id: string
   name: string
   okpo: string
   inn: string

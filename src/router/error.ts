@@ -5,6 +5,11 @@ export default [
     component: () => import('@/pages/error/503Page.vue'),
   },
   {
+    path: '/error/403',
+    name: 'error.403',
+    component: () => import('@/pages/error/403Page.vue'),
+  },
+  {
     path: '/:fallback(.*)*',
     name: 'error.404',
     component: () => import('@/pages/error/404Page.vue'),

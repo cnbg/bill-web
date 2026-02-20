@@ -166,6 +166,58 @@ const messages: Messages = {
     ru: 'Сменить организацию',
     en: 'Switch organization',
   },
+  no_access_to_page: {
+    ru: 'У вас нет доступа к этой странице',
+    en: 'You don\'t have access to this page',
+  },
+  payments: {
+    ru: 'Платежи',
+    en: 'Payments',
+  },
+  payment: {
+    ru: 'Платеж',
+    en: 'Payment',
+  },
+  account: {
+    ru: 'Счет',
+    en: 'Account',
+  },
+  amount: {
+    ru: 'Сумма',
+    en: 'Amount',
+  },
+  source: {
+    ru: 'Источник',
+    en: 'Source',
+  },
+  status: {
+    ru: 'Статус',
+    en: 'Status',
+  },
+  year: {
+    ru: 'Год',
+    en: 'Year',
+  },
+  month: {
+    ru: 'Месяц',
+    en: 'Month',
+  },
+  note: {
+    ru: 'Примечание',
+    en: 'Note',
+  },
+  completed: {
+    ru: 'Завершено',
+    en: 'Completed',
+  },
+  pending: {
+    ru: 'В ожидании',
+    en: 'Pending',
+  },
+  failed: {
+    ru: 'Неудачно',
+    en: 'Failed',
+  },
 }
 
 export default messages

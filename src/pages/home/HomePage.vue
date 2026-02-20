@@ -15,6 +15,8 @@ const auth = useAuthStore()
         <Button @click="$router.push({name: 'auth.profile'})" outlined severity="contrast" :label="$t('profile')" />
         <Button @click="$router.push({name: 'org.list'})" v-show="auth.hasPerm('org.view')"
                 outlined severity="contrast" :label="$t('orgs')" />
+        <Button @click="$router.push({name: 'payment.list'})" v-show="auth.hasPerm('payment.view')"
+                outlined severity="contrast" :label="$t('payments')" />
       </div>
     </div>
   </MainLayout>

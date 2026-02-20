@@ -18,6 +18,7 @@ import Button from 'primevue/button'
 import Card from 'primevue/card'
 import Column from 'primevue/column'
 import ConfirmDialog from 'primevue/confirmdialog'
+import ContextMenu from 'primevue/contextmenu'
 import DataTable from 'primevue/datatable'
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
@@ -50,6 +51,7 @@ app.component('Button', Button)
 app.component('Card', Card)
 app.component('Column', Column)
 app.component('ConfirmDialog', ConfirmDialog)
+app.component('ContextMenu', ContextMenu)
 app.component('DataTable', DataTable)
 app.component('InputGroup', InputGroup)
 app.component('InputGroupAddon', InputGroupAddon)

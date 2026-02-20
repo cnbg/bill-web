@@ -4,7 +4,15 @@ export default [
     name: 'org.list',
     component: () => import('@/pages/org/ListPage.vue'),
     meta: {
-      title: 'org_list',
+      auth: true,
+      perm: 'org.view',
+    },
+  },
+  {
+    path: '/org/show/:id',
+    name: 'org.show',
+    component: () => import('@/pages/org/ShowPage.vue'),
+    meta: {
       auth: true,
       perm: 'org.view',
     },

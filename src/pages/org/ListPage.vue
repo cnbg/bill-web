@@ -1,43 +1,68 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { toastEvent } from '@/utils'
+import { useAuthStore, useOrgStore } from '@/stores'
+import MyDataTable from '@/components/MyDataTable.vue'
 import type { Org } from '@/types'
-import { useAuthHttp } from '@/composables'
 
-const orgs = ref<Org[]>([])
+const router = useRouter()
+const auth = useAuthStore()
+const orgSt = useOrgStore()
 
-const loadOrgs = async () => {
-  const { data } = await useAuthHttp('/org/list').get().json()
-  orgs.value = data.value.data as Org[]
+const cm = ref()
+const selectedOrg = ref<Org>({} as Org)
+const menuModel = ref([
+  { label: 'View', icon: 'pi pi-fw pi-search', command: () => viewOrg(selectedOrg) },
+  { label: 'Delete', icon: 'pi pi-fw pi-times', command: () => deleteOrg(selectedOrg) },
+])
+
+const viewOrg = (org) => {
+  router.push({ name: 'org.show', params: { id: org.value.id } })
+}
+
+const deleteOrg = async (org) => {
+  await orgSt.deleteItems([org.value.id])
+  orgSt.items.data = orgSt.items.data.filter((p) => p.id !== org.value.id)
+  toastEvent('error', 'Org Deleted', org.value.name)
+  clearSelectedOrg()
+}
+
+const clearSelectedOrg = () => {
+  selectedOrg.value = {} as Org
 }
 
 onMounted(async () => {
-  await loadOrgs()
+  await orgSt.getItems()
 })
 </script>
 
 <template>
   <MainLayout>
-    <div class="p-4">
-      <div class="flex flex-wrap gap-4">
-        <Button @click="$router.push({ name: 'home' })" outlined severity="contrast" icon="pi pi-chevron-left" />
-        <h1 class="text-3xl font-bold underline">
-          {{ $t('orgs') }}
-        </h1>
-      </div>
-      <hr class="my-4" />
-      <div class="card">
-        <DataTable :value="orgs" paginator :rows="5" :rowsPerPageOptions="[5, 10, 20, 50]" tableStyle="min-width: 50rem"
-                   paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                   currentPageReportTemplate="{first} to {last} of {totalRecords}">
-          <template #paginatorstart>
-            <Button type="button" icon="pi pi-refresh" text @click="loadOrgs" severity="secondary" />
+    <div class="flex flex-wrap gap-4 items-center">
+      <Button @click="$router.push({ name: 'home' })" outlined severity="contrast" icon="pi pi-chevron-left" size="small" />
+      <h1 class="text-xl font-bold">{{ $t('orgs') }}</h1>
+    </div>
+    <hr class="my-4" />
+    <div class="card">
+      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedOrg" />
+      <MyDataTable :value="orgSt.items.data" :loading="orgSt.loading"
+                   contextMenu v-model:contextMenuSelection="selectedOrg" @rowContextmenu="cm.show($event.originalEvent)">
+        <template #paginatorstart>
+          <Button type="button" icon="pi pi-refresh" text @click="orgSt.getItems()" severity="secondary" />
+        </template>
+        <template #paginatorend>
+          <Button type="button" icon="pi pi-download" text severity="secondary" />
+        </template>
+        <Column field="name" :header="$t('title')" />
+        <Column style="width: 40px">
+          <template #body="{ data, field }">
+            <div class="flex flex-wrap gap-2">
+              <Button v-if="auth.hasPerm('org.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'org.show', params: { id: data.id }})" />
+            </div>
           </template>
-          <template #paginatorend>
-            <Button type="button" icon="pi pi-download" text severity="secondary" />
-          </template>
-          <Column field="name" :header="$t('title')"></Column>
-        </DataTable>
-      </div>
+        </Column>
+      </MyDataTable>
     </div>
   </MainLayout>
 </template>

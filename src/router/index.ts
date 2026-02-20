@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import homeRoutes from './home'
 import authRoutes from './auth'
 import orgRoutes from './org'
+import paymentRoutes from './payment'
 import errorRoutes from './error'
 
 const router = createRouter({
@@ -11,12 +12,12 @@ const router = createRouter({
     ...homeRoutes,
     ...authRoutes,
     ...orgRoutes,
+    ...paymentRoutes,
     ...errorRoutes,
   ],
 })
 
 router.beforeEach((to) => {
-
 })
 
 export default router

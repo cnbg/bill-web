@@ -15,6 +15,11 @@ const logout = async () => {
   }
 }
 
+const updateOrg = async () => {
+  await auth.setOrg(currentOrg.value, true)
+  window.location.reload()
+}
+
 onMounted(async () => {
   await auth.profile()
 })
@@ -22,19 +27,16 @@ onMounted(async () => {
 
 <template>
   <MainLayout>
-    <div v-if="Object.keys(auth.user).length > 0" class="max-w-screen-sm flex flex-col align-center gap-10 mx-auto my-6">
-      <div class="flex justify-between items-center gap-5">
-        <div class="flex flex-wrap gap-5 items-center">
-          <Avatar v-if="auth.user.photo" :image="auth.user.photo" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
-          <Avatar v-else icon="pi pi-user" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
-          <div>
-            <div class="font-bold lg:text-3xl text-xl">{{ auth.user.name }}</div>
-            <div class="text-gray-500 lg:text-lg text-md">{{ auth.user.email }}</div>
-          </div>
+    <div v-show="auth.user" class="max-w-screen-sm flex flex-col align-center gap-10 mx-auto my-6">
+      <div class="flex flex-wrap gap-4 items-center">
+        <Avatar v-if="auth.user.photo" :image="auth.user.photo" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
+        <Avatar v-else icon="pi pi-user" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
+        <div>
+          <div class="font-bold lg:text-3xl text-xl">{{ auth.user.name }}</div>
+          <div class="text-gray-500 lg:text-lg text-md">{{ auth.user.email }}</div>
         </div>
-        <Button icon="pi pi-sign-out" :label="$t('logout')" @click="logout" outlined severity="secondary" />
       </div>
-      <div class="flex flex-col gap-5">
+      <div class="flex flex-col gap-4">
         <div>
           <h1 class="text-lg font-bold mb-2">{{ $t('org') }}</h1>
           <div class="flex flex-wrap gap-2 items-center">
@@ -43,7 +45,7 @@ onMounted(async () => {
               :placeholder="$t('select_org')" class="min-w-40" size="small" />
             <Button
               :label="$t('switch_org')" severity="secondary" outlined size="small"
-              @click="auth.setOrg(currentOrg, true)" :disabled="currentOrg.id == auth.user.org?.id" />
+              @click="updateOrg" :disabled="currentOrg.id == auth.user.org?.id" />
           </div>
         </div>
         <div>
@@ -68,6 +70,8 @@ onMounted(async () => {
                 :icon="auth.theme === theme ? 'pi pi-check' : 'pi pi-minus'"
         />
       </div>
+      <Button icon="pi pi-sign-out" :label="$t('logout')" class="max-w-40 mt-10"
+              @click="logout" outlined severity="danger" />
     </div>
   </MainLayout>
 </template>

@@ -3,7 +3,6 @@ import { createFetch } from '@vueuse/core'
 import { useAuthStore } from '@/stores'
 
 const useAuthHttp = createFetch({
-  baseUrl: import.meta.env.VITE_API_URL! + '/v1',
   options: {
     async beforeFetch({ url, options, cancel }) {
       const access_token = await cookie.get('access')
