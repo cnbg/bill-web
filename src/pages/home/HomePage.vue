@@ -10,13 +10,13 @@ const auth = useAuthStore()
 const blocks = ref([
   {
     name: t('reference'),
-    perms: ['region.view', 'district.view', 'address.view', 'org_type.view', 'client_type.view'],
+    perms: ['region.view', 'district.view', 'address.view', 'org-type.view', 'client-type.view'],
     items: [
       { label: t('regions'), route: 'region.list', perm: 'region.view' },
       { label: t('districts'), route: 'district.list', perm: 'district.view' },
       { label: t('addresses'), route: 'address.list', perm: 'address.view' },
-      { label: t('org_types'), route: 'org_type.list', perm: 'org_type.view' },
-      { label: t('client_types'), route: 'client_type.list', perm: 'client_type.view' },
+      { label: t('org_types'), route: 'org-type.list', perm: 'org-type.view' },
+      { label: t('client_types'), route: 'client-type.list', perm: 'client-type.view' },
     ],
   },
   {
