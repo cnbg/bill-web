@@ -1,55 +1,76 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { toastEvent } from '@/utils'
+import type { ListQuery, Payment } from '@/types'
 import { useAuthStore, usePaymentStore } from '@/stores'
-import MyDataTable from '@/components/MyDataTable.vue'
-import type { Payment } from '@/types'
 
+const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
 const paymentSt = usePaymentStore()
 
 const cm = ref()
 const selectedPayment = ref<Payment>({} as Payment)
-const menuModel = ref([
-  { label: 'View', icon: 'pi pi-fw pi-search', command: () => viewPayment(selectedPayment) },
-  { label: 'Delete', icon: 'pi pi-fw pi-times', command: () => deletePayment(selectedPayment) },
-])
+const menuModel = ref([] as any[])
 
-const viewPayment = (payment) => {
+if (auth.hasPerm('payment.view')) {
+  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewPayment(selectedPayment) })
+}
+if (auth.hasPerm('payment.delete')) {
+  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deletePayment(selectedPayment) })
+}
+
+const viewPayment = (payment: any) => {
   router.push({ name: 'payment.show', params: { id: payment.value.id } })
 }
 
-const deletePayment = async (payment) => {
-  await paymentSt.deleteItems([payment.value.id])
-  paymentSt.items.data = paymentSt.items.data.filter((p) => p.id !== payment.value.id)
-  toastEvent('error', 'Payment Deleted', payment.value.name)
-  clearSelectedPayment()
+const deletePayment = async (payment: any) => {
+  if (confirm(t('are_you_sure'))) {
+    const id = payment.value.id
+    await paymentSt.deleteItem(id)
+    paymentSt.items.data = await paymentSt.items.data.filter(p => p.id !== id)
+    clearSelectedPayment()
+  }
 }
 
 const clearSelectedPayment = () => {
   selectedPayment.value = {} as Payment
 }
 
+const page = ref(0)
+const take = ref(20)
+const skip = computed(() => Number(take.value * page.value))
+const query = computed(() => ({ take: take.value, skip: skip.value, requireTotalCount: true }) as ListQuery)
+
+async function onPageChange(event: any) {
+  page.value = event.page
+  await paymentSt.getItems(query.value)
+}
+
+const menu = ref([
+  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { label: t('payments'), disabled: true },
+])
+
+provide('menu-start-items', menu)
+
 onMounted(async () => {
-  await paymentSt.getItems()
+  await paymentSt.getItems(query.value)
 })
 </script>
 
 <template>
   <MainLayout>
-    <div class="flex flex-wrap gap-4 items-center">
-      <Button @click="$router.push({ name: 'home' })" outlined severity="contrast" icon="pi pi-chevron-left" size="small" />
-      <h1 class="text-xl font-bold">{{ $t('payments') }}</h1>
-    </div>
-    <hr class="my-4" />
-    <div class="card">
+    <div class="card mt-5">
       <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedPayment" />
       <MyDataTable :value="paymentSt.items.data" :loading="paymentSt.loading"
-                   contextMenu v-model:contextMenuSelection="selectedPayment" @rowContextmenu="cm.show($event.originalEvent)">
+                   lazy :first="skip" :rows="take" :totalRecords="paymentSt.items.total_count"
+                   @page="onPageChange($event)" @update:rows="take = $event"
+                   contextMenu v-model:contextMenuSelection="selectedPayment"
+                   @rowContextmenu="cm.show($event.originalEvent)">
         <template #paginatorstart>
-          <Button type="button" icon="pi pi-refresh" text @click="paymentSt.getItems()" severity="secondary" />
+          <Button type="button" icon="pi pi-refresh" text @click="paymentSt.getItems(query)" severity="secondary" />
         </template>
         <template #paginatorend>
           <Button type="button" icon="pi pi-download" text severity="secondary" />
@@ -64,13 +85,6 @@ onMounted(async () => {
         </Column>
         <Column field="year" :header="$t('year')" />
         <Column field="month" :header="$t('month')" />
-        <Column style="width: 40px">
-          <template #body="{ data, field }">
-            <div class="flex flex-wrap gap-2">
-              <Button v-if="auth.hasPerm('payment.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'payment.show', params: { id: data.id }})" />
-            </div>
-          </template>
-        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

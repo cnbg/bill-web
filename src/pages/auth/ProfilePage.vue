@@ -2,12 +2,12 @@
 import { onMounted, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '@/stores'
-import { Org } from '@/types'
+import type { Org } from '@/types'
 
 const { t } = useI18n()
 const auth = useAuthStore()
 
-const currentOrg = ref<Org>(auth.user.org as Org)
+const currentOrg = ref(auth.user.org as Org)
 
 const logout = async () => {
   if (confirm(t('are_you_sure'))) {
@@ -29,8 +29,8 @@ onMounted(async () => {
   <MainLayout>
     <div v-show="auth.user" class="max-w-screen-sm flex flex-col align-center gap-10 mx-auto my-6">
       <div class="flex flex-wrap gap-4 items-center">
-        <Avatar v-if="auth.user.photo" :image="auth.user.photo" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
-        <Avatar v-else icon="pi pi-user" size="xlarge" @click="$router.push('/')" class="cursor-pointer" />
+        <Avatar v-if="auth.user.photo" :image="auth.user.photo" size="xlarge" />
+        <Avatar v-else icon="pi pi-user" size="xlarge" />
         <div>
           <div class="font-bold lg:text-3xl text-xl">{{ auth.user.name }}</div>
           <div class="text-gray-500 lg:text-lg text-md">{{ auth.user.email }}</div>
@@ -45,7 +45,7 @@ onMounted(async () => {
               :placeholder="$t('select_org')" class="min-w-40" size="small" />
             <Button
               :label="$t('switch_org')" severity="secondary" outlined size="small"
-              @click="updateOrg" :disabled="currentOrg.id == auth.user.org?.id" />
+              @click="updateOrg" :disabled="currentOrg.id === auth.user.org?.id" />
           </div>
         </div>
         <div>

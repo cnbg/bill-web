@@ -2,31 +2,31 @@
 import { onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useOrgStore } from '@/stores'
+import { useRegionStore } from '@/stores'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const orgId = route.params.id as string
+const regionId = route.params.id as string
 
-const orgSt = useOrgStore()
+const regionSt = useRegionStore()
 
 const menu = ref([
-  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'org.list' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'region.list' }) },
 ] as any[])
 
 provide('menu-start-items', menu)
 
 onMounted(async () => {
-  await orgSt.getItem(orgId)
-  menu.value.push({ label: orgSt.item.name, disabled: true })
+  await regionSt.getItem(regionId)
+  menu.value.push({ label: regionSt.item.name, disabled: true })
 })
 </script>
 
 <template>
   <MainLayout>
     <div class="card mt-5">
-      {{ orgSt.item.name }}
+      {{ regionSt.item.name }}
     </div>
   </MainLayout>
 </template>

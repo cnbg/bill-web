@@ -12,19 +12,27 @@ import StyleClass from 'primevue/styleclass'
 import DialogService from 'primevue/dialogservice'
 import ConfirmationService from 'primevue/confirmationservice'
 
+import Accordion from 'primevue/accordion'
+import AccordionContent from 'primevue/accordioncontent'
+import AccordionHeader from 'primevue/accordionheader'
+import AccordionPanel from 'primevue/accordionpanel'
 import Avatar from 'primevue/avatar'
 import Badge from 'primevue/badge'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
 import Column from 'primevue/column'
+import ColumnGroup from 'primevue/columngroup'
 import ConfirmDialog from 'primevue/confirmdialog'
 import ContextMenu from 'primevue/contextmenu'
 import DataTable from 'primevue/datatable'
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
 import InputText from 'primevue/inputtext'
+import Menubar from 'primevue/menubar'
 import Message from 'primevue/message'
+import Panel from 'primevue/panel'
 import Password from 'primevue/password'
+import Row from 'primevue/row'
 import Select from 'primevue/select'
 import SelectButton from 'primevue/selectbutton'
 import Tab from 'primevue/tab'
@@ -45,19 +53,27 @@ app.directive('tooltip', Tooltip)
 app.directive('focustrap', FocusTrap)
 app.directive('styleclass', StyleClass)
 
+app.component('Accordion', Accordion)
+app.component('AccordionContent', AccordionContent)
+app.component('AccordionHeader', AccordionHeader)
+app.component('AccordionPanel', AccordionPanel)
 app.component('Avatar', Avatar)
 app.component('Badge', Badge)
 app.component('Button', Button)
 app.component('Card', Card)
 app.component('Column', Column)
+app.component('ColumnGroup', ColumnGroup)
 app.component('ConfirmDialog', ConfirmDialog)
 app.component('ContextMenu', ContextMenu)
 app.component('DataTable', DataTable)
 app.component('InputGroup', InputGroup)
 app.component('InputGroupAddon', InputGroupAddon)
 app.component('InputText', InputText)
+app.component('Menubar', Menubar)
 app.component('Message', Message)
+app.component('Panel', Panel)
 app.component('Password', Password)
+app.component('Row', Row)
 app.component('Select', Select)
 app.component('SelectButton', SelectButton)
 app.component('Tab', Tab)

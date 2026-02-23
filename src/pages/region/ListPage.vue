@@ -2,41 +2,41 @@
 import { computed, onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
-import { useAuthStore, useOrgStore } from '@/stores'
+import { useAuthStore, useRegionStore } from '@/stores'
 import MyDataTable from '@/components/MyDataTable.vue'
-import type { ListQuery, Org } from '@/types'
+import type { ListQuery, Region } from '@/types'
 
 const { t } = useI18n()
 const router = useRouter()
 const auth = useAuthStore()
-const orgSt = useOrgStore()
+const regionSt = useRegionStore()
 
 const cm = ref()
-const selectedOrg = ref<Org>({} as Org)
+const selectedRegion = ref<Region>({} as Region)
 const menuModel = ref([] as any[])
 
-if (auth.hasPerm('org.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewOrg(selectedOrg) })
+if (auth.hasPerm('region.view')) {
+  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewRegion(selectedRegion) })
 }
-if (auth.hasPerm('org.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteOrg(selectedOrg) })
-}
-
-const viewOrg = (org: any) => {
-  router.push({ name: 'org.show', params: { id: org.value.id } })
+if (auth.hasPerm('region.delete')) {
+  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteRegion(selectedRegion) })
 }
 
-const deleteOrg = async (org: any) => {
+const viewRegion = (region: any) => {
+  router.push({ name: 'region.show', params: { id: region.value.id } })
+}
+
+const deleteRegion = async (region: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = org.value.id
-    await orgSt.deleteItem(id)
-    orgSt.items.data = await orgSt.items.data.filter(p => p.id !== id)
-    clearSelectedOrg()
+    const id = region.value.id
+    await regionSt.deleteItem(id)
+    regionSt.items.data = await regionSt.items.data.filter(p => p.id !== id)
+    clearSelectedRegion()
   }
 }
 
-const clearSelectedOrg = () => {
-  selectedOrg.value = {} as Org
+const clearSelectedRegion = () => {
+  selectedRegion.value = {} as Region
 }
 
 const page = ref(0)
@@ -46,32 +46,32 @@ const query = computed(() => ({ take: take.value, skip: skip.value, requireTotal
 
 async function onPageChange(event: any) {
   page.value = event.page
-  await orgSt.getItems(query.value)
+  await regionSt.getItems(query.value)
 }
 
 const menu = ref([
   { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
-  { label: t('orgs'), disabled: true },
+  { label: t('regions'), disabled: true },
 ])
 
 provide('menu-start-items', menu)
 
 onMounted(async () => {
-  await orgSt.getItems(query.value)
+  await regionSt.getItems(query.value)
 })
 </script>
 
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedOrg" />
-      <MyDataTable :value="orgSt.items.data" :loading="orgSt.loading"
-                   lazy :first="skip" :rows="take" :totalRecords="orgSt.items.total_count"
+      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedRegion" />
+      <MyDataTable :value="regionSt.items.data" :loading="regionSt.loading"
+                   lazy :first="skip" :rows="take" :totalRecords="regionSt.items.total_count"
                    @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedOrg"
+                   contextMenu v-model:contextMenuSelection="selectedRegion"
                    @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">
         <template #paginatorstart>
-          <Button type="button" icon="pi pi-refresh" text @click="orgSt.getItems(query)" severity="secondary" />
+          <Button type="button" icon="pi pi-refresh" text @click="regionSt.getItems(query)" severity="secondary" />
         </template>
         <template #paginatorend>
           <Button type="button" icon="pi pi-download" text severity="secondary" />
@@ -80,7 +80,7 @@ onMounted(async () => {
         <Column style="width: 40px">
           <template #body="{ data, field }">
             <div class="flex flex-wrap gap-2">
-              <Button v-if="auth.hasPerm('org.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'org.show', params: { id: data.id }})" />
+              <Button v-if="auth.hasPerm('region.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'region.show', params: { id: data.id }})" />
             </div>
           </template>
         </Column>

@@ -1,13 +1,13 @@
-import { getFetchService, postFetchService } from './base'
-import type { DtItem, Payment } from '@/types'
+import { deleteFetchService, getFetchService, postFetchService } from './base'
+import type { DtItem, ListQuery, Payment } from '@/types'
 
 const url = import.meta.env.VITE_API_URL! + '/v1'
 const page = 'payment'
 
 const PaymentService = {
-  getItems: async (): Promise<DtItem<Payment>> => {
+  getItems: async (query: ListQuery): Promise<DtItem<Payment>> => {
     try {
-      return await getFetchService<DtItem<Payment>>(`${url}/${page}/list`)
+      return await getFetchService<DtItem<Payment>>(`${url}/${page}/list`, query)
     } catch (error) {
       throw error
     }
@@ -21,9 +21,9 @@ const PaymentService = {
     }
   },
 
-  deleteItems: async (ids: string[]): Promise<Payment> => {
+  deleteItem: async (id: string): Promise<Payment> => {
     try {
-      return await deleteFetchService<Payment>(`${url}/${page}/delete`, ids)
+      return await deleteFetchService<Payment>(`${url}/${page}/delete/${id}`)
     } catch (error) {
       throw error
     }

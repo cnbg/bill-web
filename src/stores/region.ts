@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { ListQuery, Org } from '@/types'
-import { OrgService } from '@/services'
+import type { ListQuery, Region } from '@/types'
+import { RegionService } from '@/services'
 import type { DtItem } from '@/types'
 
-interface OrgState {
-  items: DtItem<Org>
-  item: Org
+interface RegionState {
+  items: DtItem<Region>
+  item: Region
   loading: boolean
   creating: boolean
   updating: boolean
@@ -13,10 +13,10 @@ interface OrgState {
   errors: string[]
 }
 
-const useOrgStore = defineStore(`org-store`, {
-  state: (): OrgState => ({
-    items: {} as DtItem<Org>,
-    item: {} as Org,
+const useRegionStore = defineStore(`region-store`, {
+  state: (): RegionState => ({
+    items: {} as DtItem<Region>,
+    item: {} as Region,
     loading: false,
     creating: false,
     updating: false,
@@ -30,7 +30,7 @@ const useOrgStore = defineStore(`org-store`, {
       this.errors = []
 
       try {
-        this.items = await OrgService.getItems(query)
+        this.items = await RegionService.getItems(query)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_fetching_data')
       }
@@ -42,7 +42,7 @@ const useOrgStore = defineStore(`org-store`, {
       this.errors = []
 
       try {
-        this.item = await OrgService.getItem(id)
+        this.item = await RegionService.getItem(id)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_fetching_data')
       }
@@ -54,7 +54,7 @@ const useOrgStore = defineStore(`org-store`, {
       this.errors = []
 
       try {
-        await OrgService.deleteItem(id)
+        await RegionService.deleteItem(id)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_deleting_data')
       }
@@ -64,4 +64,4 @@ const useOrgStore = defineStore(`org-store`, {
   },
 })
 
-export default useOrgStore
+export default useRegionStore

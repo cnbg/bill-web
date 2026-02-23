@@ -184,6 +184,7 @@ const useAuthStore = defineStore('auth-store', {
     },
     hasPerm(...perm: string[]) {
       if (!this.isAuth) return false
+      if (perm.includes('show')) return true
       // if (this.user.type === 'system') return true
 
       return perm.some(p => this.user?.perms.includes(p))

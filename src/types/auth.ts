@@ -13,7 +13,7 @@ export interface AuthUser {
 }
 
 export interface Org {
-  id: number
+  id: string
   name: string
 }
 

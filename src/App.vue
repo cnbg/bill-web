@@ -23,6 +23,7 @@ useEventListener(document, EventName.SHOW_TOAST, (event: CustomEvent<ToastMessag
 </script>
 
 <template>
+  <div v-if="dev" class="text-center bg-red-400 font-bold p-1">test mode</div>
   <RouterView />
   <Teleport to="body">
     <Toast position="top-right" />

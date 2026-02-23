@@ -218,6 +218,202 @@ const messages: Messages = {
     ru: 'Неудачно',
     en: 'Failed',
   },
+  view: {
+    ru: 'Просмотр',
+    en: 'View',
+  },
+  edit: {
+    ru: 'Редактировать',
+    en: 'Edit',
+  },
+  delete: {
+    ru: 'Удалить',
+    en: 'Delete',
+  },
+  create: {
+    ru: 'Создать',
+    en: 'Create',
+  },
+  update: {
+    ru: 'Обновить',
+    en: 'Update',
+  },
+  cancel: {
+    ru: 'Отмена',
+    en: 'Cancel',
+  },
+  save: {
+    ru: 'Сохранить',
+    en: 'Save',
+  },
+  confirm: {
+    ru: 'Подтвердить',
+    en: 'Confirm',
+  },
+  yes: {
+    ru: 'Да',
+    en: 'Yes',
+  },
+  no: {
+    ru: 'Нет',
+    en: 'No',
+  },
+  reference: {
+    ru: 'Справочник',
+    en: 'Reference',
+  },
+  support: {
+    ru: 'Поддержка',
+    en: 'Support',
+  },
+  perms: {
+    ru: 'Права доступа',
+    en: 'Permissions',
+  },
+  articles: {
+    ru: 'Новости',
+    en: 'News',
+  },
+  users: {
+    ru: 'Пользователи',
+    en: 'Users',
+  },
+  user: {
+    ru: 'Пользователь',
+    en: 'User',
+  },
+  clients: {
+    ru: 'Клиенты',
+    en: 'Clients',
+  },
+  client: {
+    ru: 'Клиент',
+    en: 'Client',
+  },
+  search: {
+    ru: 'Поиск',
+    en: 'Search',
+  },
+  filter: {
+    ru: 'Фильтр',
+    en: 'Filter',
+  },
+  clear: {
+    ru: 'Очистить',
+    en: 'Clear',
+  },
+  charges: {
+    ru: 'Начисления',
+    en: 'Charges',
+  },
+  charge: {
+    ru: 'Начисление',
+    en: 'Charge',
+  },
+  balance: {
+    ru: 'Баланс',
+    en: 'Balance',
+  },
+  transactions: {
+    ru: 'Транзакции',
+    en: 'Transactions',
+  },
+  transaction: {
+    ru: 'Транзакция',
+    en: 'Transaction',
+  },
+  fines: {
+    ru: 'Пени',
+    en: 'Fines',
+  },
+  fine: {
+    ru: 'Пеня',
+    en: 'Fine',
+  },
+  expenses: {
+    ru: 'Расходы',
+    en: 'Expenses',
+  },
+  expense: {
+    ru: 'Расход',
+    en: 'Expense',
+  },
+  reports: {
+    ru: 'Отчеты',
+    en: 'Reports',
+  },
+  report: {
+    ru: 'Отчет',
+    en: 'Report',
+  },
+  regions: {
+    ru: 'Области',
+    en: 'Regions',
+  },
+  region: {
+    ru: 'Область',
+    en: 'Region',
+  },
+  districts: {
+    ru: 'Районы',
+    en: 'Districts',
+  },
+  district: {
+    ru: 'Район',
+    en: 'District',
+  },
+  streets: {
+    ru: 'Улицы',
+    en: 'Streets',
+  },
+  street: {
+    ru: 'Улица',
+    en: 'Street',
+  },
+  houses: {
+    ru: 'Дома',
+    en: 'Houses',
+  },
+  house: {
+    ru: 'Дом',
+    en: 'House',
+  },
+  apartments: {
+    ru: 'Квартиры',
+    en: 'Apartments',
+  },
+  apartment: {
+    ru: 'Квартира',
+    en: 'Apartment',
+  },
+  org_types: {
+    ru: 'Типы организаций',
+    en: 'Organization types',
+  },
+  org_type: {
+    ru: 'Тип организации',
+    en: 'Organization type',
+  },
+  client_types: {
+    ru: 'Типы клиентов',
+    en: 'Client types',
+  },
+  client_type: {
+    ru: 'Тип клиента',
+    en: 'Client type',
+  },
+  addresses: {
+    ru: 'Адреса',
+    en: 'Addresses',
+  },
+  address: {
+    ru: 'Адрес',
+    en: 'Address',
+  },
+  billing: {
+    ru: 'Биллинг',
+    en: 'Billing',
+  },
 }
 
 export default messages

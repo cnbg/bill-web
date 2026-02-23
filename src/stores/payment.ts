@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { Payment } from '@/types'
+import type { ListQuery, Payment } from '@/types'
 import { PaymentService } from '@/services'
 import type { DtItem } from '@/types'
 
@@ -25,12 +25,12 @@ const usePaymentStore = defineStore(`payment-store`, {
   }),
   getters: {},
   actions: {
-    async getItems() {
+    async getItems(query: ListQuery) {
       this.loading = true
       this.errors = []
 
       try {
-        this.items = await PaymentService.getItems()
+        this.items = await PaymentService.getItems(query)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_fetching_data')
       }
@@ -49,12 +49,12 @@ const usePaymentStore = defineStore(`payment-store`, {
 
       this.loading = false
     },
-    async deleteItems(ids: string[]) {
+    async deleteItem(id: string) {
       this.deleting = true
       this.errors = []
 
       try {
-        await PaymentService.deleteItems(ids)
+        await PaymentService.deleteItem(id)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_deleting_data')
       }

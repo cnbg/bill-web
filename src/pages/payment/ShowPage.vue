@@ -1,27 +1,30 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute } from 'vue-router'
-import { useOrgStore } from '@/stores'
+import { onMounted, provide, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { usePaymentStore } from '@/stores'
 
 const route = useRoute()
-const orgId = route.params.id as string
+const router = useRouter()
+const paymentId = route.params.id as string
 
-const orgSt = useOrgStore()
+const paymentSt = usePaymentStore()
+
+const menu = ref([
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'payment.list' }) },
+] as any[])
+
+provide('menu-start-items', menu)
 
 onMounted(async () => {
-  await orgSt.getOne(orgId)
+  await paymentSt.getItem(paymentId)
+  menu.value.push({ label: paymentSt.item.account, disabled: true })
 })
 </script>
 
 <template>
   <MainLayout>
-    <div class="flex flex-wrap gap-4 items-center">
-      <Button @click="$router.push({ name: 'org.list' })" outlined severity="contrast" icon="pi pi-chevron-left" size="small" />
-      <h1 class="text-xl font-bold">{{ $t('org') }}</h1>
-    </div>
-    <hr class="my-4" />
-    <div class="card">
-      {{ orgSt.item.name }}
+    <div class="card mt-5">
+      {{ paymentSt.item.account }}
     </div>
   </MainLayout>
 </template>
