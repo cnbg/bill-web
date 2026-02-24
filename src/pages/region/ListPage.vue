@@ -77,13 +77,6 @@ onMounted(async () => {
           <Button type="button" icon="pi pi-download" text severity="secondary" />
         </template>
         <Column field="name" :header="$t('title')" />
-        <Column style="width: 40px">
-          <template #body="{ data, field }">
-            <div class="flex flex-wrap gap-2">
-              <Button v-if="auth.hasPerm('region.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'region.show', params: { id: data.id }})" />
-            </div>
-          </template>
-        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

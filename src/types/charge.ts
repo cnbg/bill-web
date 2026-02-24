@@ -1,4 +1,4 @@
-export interface Payment {
+export interface Charge {
   id: string
   org_id: string
   account: string

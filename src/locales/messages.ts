@@ -138,9 +138,21 @@ const messages: Messages = {
     ru: 'Произошла ошибка при сохранении данных',
     en: 'An error occurred while saving data',
   },
+  error_deleting_data: {
+    ru: 'Произошла ошибка при удалении данных',
+    en: 'An error occurred while deleting data',
+  },
   invalid_username_or_password: {
     ru: 'Неверное имя пользователя или пароль',
     en: 'Invalid username or password',
+  },
+  'org-type': {
+    ru: 'Вид организации',
+    en: 'Organization type',
+  },
+  'client-type': {
+    ru: 'Вид абонента',
+    en: 'Client type',
   },
   orgs: {
     ru: 'Организации',
@@ -283,7 +295,7 @@ const messages: Messages = {
     en: 'User',
   },
   clients: {
-    ru: 'Клиенты',
+    ru: 'Абоненты',
     en: 'Clients',
   },
   client: {

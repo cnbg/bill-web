@@ -2,31 +2,31 @@
 import { onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
-import { useOrgTypeStore } from '@/stores'
+import { useClientStore } from '@/stores'
 
 const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
-const orgTypeId = route.params.id as string
+const clientId = route.params.id as string
 
-const orgTypeSt = useOrgTypeStore()
+const clientSt = useClientStore()
 
 const menu = ref([
-  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'orgType.list' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'client.list' }) },
 ] as any[])
 
 provide('menu-start-items', menu)
 
 onMounted(async () => {
-  await orgTypeSt.getItem(orgTypeId)
-  menu.value.push({ label: orgTypeSt.item.name, disabled: true })
+  await clientSt.getItem(clientId)
+  menu.value.push({ label: clientSt.item.account, disabled: true })
 })
 </script>
 
 <template>
   <MainLayout>
     <div class="card mt-5">
-      {{ orgTypeSt.item.name }}
+      {{ clientSt.item.account }}
     </div>
   </MainLayout>
 </template>

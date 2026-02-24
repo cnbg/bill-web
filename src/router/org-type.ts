@@ -1,17 +1,17 @@
 export default [
   {
-    path: '/orgtype/list',
+    path: '/org-type/list',
     name: 'org-type.list',
-    component: () => import('@/pages/orgtype/ListPage.vue'),
+    component: () => import('@/pages/org-type/ListPage.vue'),
     meta: {
       auth: true,
       perm: 'org-type.view',
     },
   },
   {
-    path: '/orgtype/show/:id',
+    path: '/org-type/show/:id',
     name: 'org-type.show',
-    component: () => import('@/pages/orgtype/ShowPage.vue'),
+    component: () => import('@/pages/org-type/ShowPage.vue'),
     meta: {
       auth: true,
       perm: 'org-type.view',

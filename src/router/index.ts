@@ -4,9 +4,13 @@ import homeRoutes from './home'
 import authRoutes from './auth'
 import regionRoutes from './region'
 import districtRoutes from './district'
-import orgTypeRoutes from './orgtype'
+import orgTypeRoutes from './org-type'
 import orgRoutes from './org'
+import roleRoutes from './role'
+import clientTypeRoutes from './client-type'
+import clientRoutes from './client'
 import paymentRoutes from './payment'
+import chargeRoutes from './charge'
 import errorRoutes from './error'
 
 const router = createRouter({
@@ -18,7 +22,11 @@ const router = createRouter({
     ...districtRoutes,
     ...orgTypeRoutes,
     ...orgRoutes,
+    ...roleRoutes,
+    ...clientTypeRoutes,
+    ...clientRoutes,
     ...paymentRoutes,
+    ...chargeRoutes,
     ...errorRoutes,
   ],
 })

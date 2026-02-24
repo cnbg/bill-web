@@ -78,13 +78,6 @@ onMounted(async () => {
         </template>
         <Column field="region.name" :header="$t('region')" />
         <Column field="name" :header="$t('district')" />
-        <Column style="width: 40px">
-          <template #body="{ data, field }">
-            <div class="flex flex-wrap gap-2">
-              <Button v-if="auth.hasPerm('district.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'district.show', params: { id: data.id }})" />
-            </div>
-          </template>
-        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

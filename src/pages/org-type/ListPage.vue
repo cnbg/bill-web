@@ -15,15 +15,15 @@ const cm = ref()
 const selectedOrgType = ref<OrgType>({} as OrgType)
 const menuModel = ref([] as any[])
 
-if (auth.hasPerm('org_type.view')) {
+if (auth.hasPerm('org-type.view')) {
   menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewOrgType(selectedOrgType) })
 }
-if (auth.hasPerm('org_type.delete')) {
+if (auth.hasPerm('org-type.delete')) {
   menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteOrgType(selectedOrgType) })
 }
 
 const viewOrgType = (orgType: any) => {
-  router.push({ name: 'org_type.show', params: { id: orgType.value.id } })
+  router.push({ name: 'org-type.show', params: { id: orgType.value.id } })
 }
 
 const deleteOrgType = async (orgType: any) => {
@@ -51,7 +51,7 @@ async function onPageChange(event: any) {
 
 const menu = ref([
   { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
-  { label: t('orgTypes'), disabled: true },
+  { label: t('org_types'), disabled: true },
 ])
 
 provide('menu-start-items', menu)
@@ -77,13 +77,6 @@ onMounted(async () => {
           <Button type="button" icon="pi pi-download" text severity="secondary" />
         </template>
         <Column field="name" :header="$t('title')" />
-        <Column style="width: 40px">
-          <template #body="{ data, field }">
-            <div class="flex flex-wrap gap-2">
-              <Button v-if="auth.hasPerm('org_type.show')" text severity="secondary" icon="pi pi-eye" @click="$router.push({name: 'org_type.show', params: { id: data.id }})" />
-            </div>
-          </template>
-        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

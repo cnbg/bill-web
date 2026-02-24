@@ -1,4 +1,4 @@
-import app from './globals.ts'
+import app from './globals'
 import { useAuthStore } from '@/stores'
 
 const auth = useAuthStore()

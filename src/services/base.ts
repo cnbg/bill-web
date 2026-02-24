@@ -2,25 +2,49 @@ import { useAuthHttp } from '@/composables'
 import type { ListQuery } from '@/types'
 
 export const getFetchService = async <T>(url: string, query?: ListQuery): Promise<T> => {
-  const { data, error } = await useAuthHttp<T>(url + '?' + new URLSearchParams(query as any).toString()).get().json()
+  const { data, error, statusCode } = await useAuthHttp<T>(url + '?' + new URLSearchParams(query as any).toString()).get()
   if (error.value) {
     throw new Error(error.value?.message || 'error_fetching_data')
   }
-  return data.value as T
+  try {
+    return JSON.parse(data.value as any) as T
+  } catch (e) {
+    return {} as T
+  }
 }
 
 export const postFetchService = async <T>(url: string, body?: any): Promise<T> => {
-  const { data, error } = await useAuthHttp<T>(url).post(body).json()
+  const { data, error, statusCode } = await useAuthHttp<T>(url).post(body)
   if (error.value) {
-    throw new Error(error.value?.message || 'error_fetching_data')
+    throw new Error(error.value?.message || 'error_saving_data')
   }
-  return data.value as T
+  try {
+    return JSON.parse(data.value as any) as T
+  } catch (e) {
+    return {} as T
+  }
+}
+
+export const putFetchService = async <T>(url: string, body?: any): Promise<T> => {
+  const { data, error, statusCode } = await useAuthHttp<T>(url).put(body)
+  if (error.value) {
+    throw new Error(error.value?.message || 'error_saving_data')
+  }
+  try {
+    return JSON.parse(data.value as any) as T
+  } catch (e) {
+    return {} as T
+  }
 }
 
 export const deleteFetchService = async <T>(url: string, body?: any): Promise<T> => {
-  const { data, error } = await useAuthHttp<T>(url).delete(body).json()
+  const { data, error, statusCode } = await useAuthHttp<T>(url).delete(body)
   if (error.value) {
-    throw new Error(error.value?.message || 'error_fetching_data')
+    throw new Error(error.value?.message || 'error_deleting_data')
   }
-  return data.value as T
+  try {
+    return JSON.parse(data.value as any) as T
+  } catch (e) {
+    return {} as T
+  }
 }
