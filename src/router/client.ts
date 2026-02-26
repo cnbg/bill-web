@@ -17,4 +17,13 @@ export default [
       perm: 'client.view',
     },
   },
+  {
+    path: '/client/create',
+    name: 'client.create',
+    component: () => import('@/pages/client/CreatePage.vue'),
+    meta: {
+      auth: true,
+      perm: 'client.create',
+    },
+  },
 ]

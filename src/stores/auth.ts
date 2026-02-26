@@ -94,14 +94,14 @@ const useAuthStore = defineStore('auth-store', {
       this.loading = true
       this.errors = []
 
-      const refresh_token = await cookie.get('refresh')
-      if (!refresh_token) {
+      const refreshToken = await cookie.get('refresh')
+      if (!refreshToken) {
         this.loading = false
         await this.logout()
         return
       }
       const { data, error } = await useFetch<LoginResponse>(baseUrl + '/auth/refresh').post({
-        refresh_token: refresh_token,
+        refreshToken: refreshToken,
       }).json()
 
       if (error.value) {
@@ -123,12 +123,12 @@ const useAuthStore = defineStore('auth-store', {
 
       await this.cleanCookies()
 
-      const access_token = data.access_token
-      const refresh_token = data.refresh_token
-      this.jwt_exp = parseJwt(access_token)?.exp ?? 0
-      if (access_token || refresh_token) {
-        await cookie.set('access', access_token, { days: 1 })
-        await cookie.set('refresh', refresh_token, { days: 90 })
+      const accessToken = data.accessToken
+      const refreshToken = data.refreshToken
+      this.jwt_exp = parseJwt(accessToken)?.exp ?? 0
+      if (accessToken || refreshToken) {
+        await cookie.set('access', accessToken, { days: 1 })
+        await cookie.set('refresh', refreshToken, { days: 90 })
       } else {
         this.errors.push('error_fetching_data')
       }

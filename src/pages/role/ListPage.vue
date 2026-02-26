@@ -66,7 +66,7 @@ onMounted(async () => {
     <div class="card mt-5">
       <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedRole" />
       <MyDataTable :value="roleSt.items.data" :loading="roleSt.loading"
-                   lazy :first="skip" :rows="take" :totalRecords="roleSt.items.total_count"
+                   lazy :first="skip" :rows="take" :totalRecords="roleSt.items.totalCount"
                    @page="onPageChange($event)" @update:rows="take = $event"
                    contextMenu v-model:contextMenuSelection="selectedRole"
                    @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">

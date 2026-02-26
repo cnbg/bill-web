@@ -21,15 +21,14 @@ const blocks = ref([
   },
   {
     name: t('billing'),
-    perms: ['org.view', 'user.view', 'client.view', 'charge.view', 'payment.view', 'expense.view', 'fine.view', 'balance.view'],
+    perms: ['org.view', 'user.view', 'client.view', 'charge.view', 'payment.view', 'expense.view', 'balance.view'],
     items: [
       { label: t('orgs'), route: 'org.list', perm: 'org.view' },
-      { label: t('users'), route: 'user.list', perm: 'user.view' },
       { label: t('clients'), route: 'client.list', perm: 'client.view' },
+      { label: t('residents'), route: 'user.list', perm: 'user.view' },
       { label: t('charges'), route: 'charge.list', perm: 'charge.view' },
       { label: t('payments'), route: 'payment.list', perm: 'payment.view' },
       { label: t('expenses'), route: 'expense.list', perm: 'expense.view' },
-      { label: t('fines'), route: 'fine.list', perm: 'fine.view' },
       { label: t('balance'), route: 'balance.list', perm: 'balance.view' },
     ],
   },
@@ -42,10 +41,11 @@ const blocks = ref([
   },
   {
     name: t('settings'),
-    perms: ['role.view', 'perm.view'],
+    perms: ['role.view', 'rate.view', 'fine.view'],
     items: [
+      { label: t('rate'), route: 'rate.list', perm: 'rate.view' },
+      { label: t('fine'), route: 'fine.list', perm: 'fine.view' },
       { label: t('roles'), route: 'role.list', perm: 'role.view' },
-      { label: t('perms'), route: 'perm.list', perm: 'perm.view' },
     ],
   },
 ])

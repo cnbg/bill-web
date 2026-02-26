@@ -8,7 +8,7 @@ export interface AuthUser {
   theme: string
   org: Org
   orgs: Org[]
-  roles: string[]
+  roles: AuthRole[]
   perms: string[]
 }
 
@@ -17,8 +17,13 @@ export interface Org {
   name: string
 }
 
+export interface AuthRole {
+  id: string
+  name: string
+}
+
 export interface LoginResponse {
-  access_token: string
-  refresh_token: string
+  accessToken: string
+  refreshToken: string
   user: AuthUser
 }

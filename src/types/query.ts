@@ -1,9 +1,20 @@
 export interface ListQuery {
   skip?: number
   take?: number
-  search?: string
-  sort_by?: string
-  sort_order?: 'asc' | 'desc'
+  sort?: SortQuery[]
+  filter?: [string, string, any][] // [field, operator, value]
+  searchOperation?: string
+  totalSummary?: SummaryQuery[]
   requireTotalCount?: boolean
   requireGroupCount?: boolean
+}
+
+interface SortQuery {
+  selector: string
+  desc: boolean
+}
+
+interface SummaryQuery {
+  selector: string
+  summaryType: string
 }

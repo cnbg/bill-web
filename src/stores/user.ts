@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia'
-import type { ListQuery, Client } from '@/types'
-import { ClientService } from '@/services'
+import type { ListQuery, User } from '@/types'
+import { UserService } from '@/services'
 import type { DtItem } from '@/types'
 
-interface ClientState {
-  items: DtItem<Client>
-  item: Client
+interface UserState {
+  items: DtItem<User>
+  item: User
   loading: boolean
   creating: boolean
   updating: boolean
@@ -13,10 +13,10 @@ interface ClientState {
   errors: string[]
 }
 
-const useClientStore = defineStore(`client-store`, {
-  state: (): ClientState => ({
-    items: {} as DtItem<Client>,
-    item: {} as Client,
+const useUserStore = defineStore(`user-store`, {
+  state: (): UserState => ({
+    items: {} as DtItem<User>,
+    item: {} as User,
     loading: false,
     creating: false,
     updating: false,
@@ -24,7 +24,7 @@ const useClientStore = defineStore(`client-store`, {
     errors: [],
   }),
   getters: {
-    name: (state) => `${state.item.account} - ${state.item.houseNum}д. ${state.item.apartNum}кв.`,
+    name: (state) => `${state.item.firstName} ${state.item.lastName}`,
   },
   actions: {
     async getItems(query: ListQuery) {
@@ -32,7 +32,7 @@ const useClientStore = defineStore(`client-store`, {
       this.errors = []
 
       try {
-        this.items = await ClientService.getItems(query)
+        this.items = await UserService.getItems(query)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_fetching_data')
       }
@@ -44,7 +44,7 @@ const useClientStore = defineStore(`client-store`, {
       this.errors = []
 
       try {
-        this.item = await ClientService.getItem(id)
+        this.item = await UserService.getItem(id)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_fetching_data')
       }
@@ -56,7 +56,7 @@ const useClientStore = defineStore(`client-store`, {
       this.errors = []
 
       try {
-        await ClientService.deleteItem(id)
+        await UserService.deleteItem(id)
       } catch (error) {
         this.errors.push(error instanceof Error ? error.message : 'error_deleting_data')
       }
@@ -66,4 +66,4 @@ const useClientStore = defineStore(`client-store`, {
   },
 })
 
-export default useClientStore
+export default useUserStore

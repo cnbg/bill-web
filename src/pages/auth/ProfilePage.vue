@@ -51,7 +51,7 @@ onMounted(async () => {
         <div>
           <h1 class="text-lg font-bold mb-2">{{ $t('roles') }}</h1>
           <div class="flex flex-wrap gap-2">
-            <Tag v-for="(role,index) in auth.user.roles" :key="index" :value="role" severity="secondary" />
+            <Tag v-for="(role,index) in auth.user.roles" :key="index" :value="role.name" severity="secondary" />
           </div>
         </div>
       </div>

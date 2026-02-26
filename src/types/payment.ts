@@ -1,6 +1,7 @@
 export interface Payment {
   id: string
-  org_id: string
+  orgId: string
+  clientId: string
   account: string
   amount: number
   source: string

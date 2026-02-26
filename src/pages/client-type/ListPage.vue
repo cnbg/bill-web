@@ -66,7 +66,7 @@ onMounted(async () => {
     <div class="card mt-5">
       <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedClientType" />
       <MyDataTable :value="clientTypeSt.items.data" :loading="clientTypeSt.loading"
-                   lazy :first="skip" :rows="take" :totalRecords="clientTypeSt.items.total_count"
+                   lazy :first="skip" :rows="take" :totalRecords="clientTypeSt.items.totalCount"
                    @page="onPageChange($event)" @update:rows="take = $event"
                    contextMenu v-model:contextMenuSelection="selectedClientType"
                    @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">

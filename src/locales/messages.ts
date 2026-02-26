@@ -34,6 +34,18 @@ const messages: Messages = {
     ru: 'Введите ваш пароль',
     en: 'Enter your password',
   },
+  first_name: {
+    ru: 'Имя',
+    en: 'Firstname',
+  },
+  last_name: {
+    ru: 'Фамилия',
+    en: 'Lastname',
+  },
+  billing_settings: {
+    ru: 'Настройки биллинга',
+    en: 'Billing settings',
+  },
   server_not_responding: {
     ru: 'Сервер не отвечает',
     en: 'Server is not responding',
@@ -89,6 +101,18 @@ const messages: Messages = {
   title: {
     ru: 'Название',
     en: 'Title',
+  },
+  select: {
+    ru: 'Выберите',
+    en: 'Select',
+  },
+  loading: {
+    ru: 'Загружается',
+    en: 'Loading',
+  },
+  empty_data: {
+    ru: 'Нет данных для отображения',
+    en: 'No data to display',
   },
   not_found: {
     ru: 'Не найдено',
@@ -146,6 +170,10 @@ const messages: Messages = {
     ru: 'Неверное имя пользователя или пароль',
     en: 'Invalid username or password',
   },
+  residents: {
+    ru: 'Жильцы',
+    en: 'Residents',
+  },
   'org-type': {
     ru: 'Вид организации',
     en: 'Organization type',
@@ -153,6 +181,14 @@ const messages: Messages = {
   'client-type': {
     ru: 'Вид абонента',
     en: 'Client type',
+  },
+  rate: {
+    ru: 'Тариф',
+    en: 'Rate',
+  },
+  rates: {
+    ru: 'Тарифы',
+    en: 'Rates',
   },
   orgs: {
     ru: 'Организации',
@@ -425,6 +461,58 @@ const messages: Messages = {
   billing: {
     ru: 'Биллинг',
     en: 'Billing',
+  },
+  bakai: {
+    ru: 'Бакай',
+    en: 'Bakai',
+  },
+  obank: {
+    ru: 'Обанк',
+    en: 'Obank',
+  },
+  mbank: {
+    ru: 'Мбанк',
+    en: 'Mbank',
+  },
+  cash: {
+    ru: 'Наличка',
+    en: 'Cash',
+  },
+  area: {
+    ru: 'Площадь',
+    en: 'Area',
+  },
+  entrance: {
+    ru: 'Подъезд',
+    en: 'Entrance',
+  },
+  floor: {
+    ru: 'Этаж',
+    en: 'Floor',
+  },
+  house_num: {
+    ru: 'Номер дома',
+    en: 'House number',
+  },
+  apart_num: {
+    ru: 'Номер квартиры',
+    en: 'Apartment number',
+  },
+  members_count: {
+    ru: 'Количество жильцов',
+    en: 'Number of residents',
+  },
+  owner: {
+    ru: 'Владелец',
+    en: 'Owner',
+  },
+  tenant: {
+    ru: 'Арендатор',
+    en: 'Tenant',
+  },
+  other: {
+    ru: 'Другое',
+    en: 'Other',
   },
 }
 

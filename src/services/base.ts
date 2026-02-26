@@ -1,8 +1,10 @@
 import { useAuthHttp } from '@/composables'
 import type { ListQuery } from '@/types'
+import { toQueryString } from '@/utils'
 
 export const getFetchService = async <T>(url: string, query?: ListQuery): Promise<T> => {
-  const { data, error, statusCode } = await useAuthHttp<T>(url + '?' + new URLSearchParams(query as any).toString()).get()
+  const params = query ? '?' + toQueryString(query as Record<string, any>) : ''
+  const { data, error, statusCode } = await useAuthHttp<T>(url + params).get()
   if (error.value) {
     throw new Error(error.value?.message || 'error_fetching_data')
   }

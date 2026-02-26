@@ -28,13 +28,16 @@ import DataTable from 'primevue/datatable'
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
 import InputText from 'primevue/inputtext'
+import InputNumber from 'primevue/inputnumber'
 import Menubar from 'primevue/menubar'
 import Message from 'primevue/message'
+import MultiSelect from 'primevue/multiselect'
 import Panel from 'primevue/panel'
 import Password from 'primevue/password'
 import Row from 'primevue/row'
 import Select from 'primevue/select'
 import SelectButton from 'primevue/selectbutton'
+import SplitButton from 'primevue/splitbutton'
 import Tab from 'primevue/tab'
 import TabList from 'primevue/tablist'
 import TabPanel from 'primevue/tabpanel'
@@ -43,6 +46,7 @@ import Tabs from 'primevue/tabs'
 import Tag from 'primevue/tag'
 import Toast from 'primevue/toast'
 import ToggleSwitch from 'primevue/toggleswitch'
+import Toolbar from 'primevue/toolbar'
 
 app.use(ToastService)
 app.use(DialogService)
@@ -69,13 +73,16 @@ app.component('DataTable', DataTable)
 app.component('InputGroup', InputGroup)
 app.component('InputGroupAddon', InputGroupAddon)
 app.component('InputText', InputText)
+app.component('InputNumber', InputNumber)
 app.component('Menubar', Menubar)
 app.component('Message', Message)
+app.component('MultiSelect', MultiSelect)
 app.component('Panel', Panel)
 app.component('Password', Password)
 app.component('Row', Row)
 app.component('Select', Select)
 app.component('SelectButton', SelectButton)
+app.component('SplitButton', SplitButton)
 app.component('Tab', Tab)
 app.component('TabList', TabList)
 app.component('TabPanel', TabPanel)
@@ -84,6 +91,7 @@ app.component('Tabs', Tabs)
 app.component('Tag', Tag)
 app.component('Toast', Toast)
 app.component('ToggleSwitch', ToggleSwitch)
+app.component('Toolbar', Toolbar)
 
 app.use(PrimeVue, {
   ripple: true,

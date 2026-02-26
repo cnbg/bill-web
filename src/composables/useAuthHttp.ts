@@ -5,11 +5,11 @@ import { useAuthStore } from '@/stores'
 const useAuthHttp = createFetch({
   options: {
     async beforeFetch({ url, options, cancel }) {
-      const access_token = await cookie.get('access')
-      const refresh_token = await cookie.get('refresh')
-      if (!access_token) {
+      const accessToken = await cookie.get('access')
+      const refreshToken = await cookie.get('refresh')
+      if (!accessToken) {
         cancel()
-        if (refresh_token) {
+        if (refreshToken) {
           await refresh()
         } else {
           goto('/auth/login')
@@ -19,7 +19,7 @@ const useAuthHttp = createFetch({
       options.headers = {
         ...options.headers,
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${accessToken}`,
       }
 
       return { url, options, cancel }

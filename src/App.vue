@@ -5,7 +5,7 @@ import { useEventListener } from '@vueuse/core'
 import { useAuthStore } from '@/stores'
 import { EventName } from '@/enums'
 import type { ToastMessageOptions } from 'primevue/toast'
-import { onBeforeMount } from 'vue'
+import { changePrimeVueLocale } from '@/locales/primevue'
 
 const dev = import.meta.env.DEV
 const { t } = useI18n()
@@ -20,6 +20,8 @@ useEventListener(document, EventName.SHOW_TOAST, (event: CustomEvent<ToastMessag
     life: event.detail.life || 3000,
   })
 })
+
+changePrimeVueLocale(auth.locale)
 </script>
 
 <template>
