@@ -2,13 +2,19 @@
 import { inject } from 'vue'
 import { useAuthStore } from '@/stores'
 
+type MenuBarItem = {
+  disabled?: boolean
+  icon?: string
+  label?: string
+  command?: () => void | Promise<void>
+}
+
 const auth = useAuthStore()
-const startItems = inject('menu-start-items', [])
-const items = inject('menu-items', [])
+const startItems = inject<MenuBarItem[]>('menu-start-items', [])
 </script>
 
 <template>
-  <Toolbar :model="items">
+  <Toolbar>
     <template #start>
       <div class="flex items-center gap-2">
         <Button
@@ -17,13 +23,13 @@ const items = inject('menu-items', [])
         <template v-else>
           <Button v-for="(item, index) in startItems" :key="index"
                   :disabled="item.disabled" :icon="item.icon" :label="item.label"
-                  text severity="contrast" @click="item.command" />
+                  text severity="contrast" @click="item.command?.()" />
         </template>
       </div>
     </template>
     <template #center>
       <div class="flex items-center gap-2">
-        <Button :label="auth.user.org.name" severity="secondary" text />
+        <Button :label="auth.user.org?.name" severity="secondary" text />
       </div>
     </template>
     <template #end>
