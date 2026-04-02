@@ -19,7 +19,7 @@ const Cookie = {
       expires: Date.now() + (options.days ?? 7) * 24 * 60 * 60 * 1000,
       path: options.path,
       domain: options.domain,
-      sameSite: options.sameSite || 'strict',
+      sameSite: options.sameSite || 'lax',
     })
   },
 

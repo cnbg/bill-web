@@ -7,7 +7,7 @@ const auth = useAuthStore()
 
 const login = async () => {
   await auth.login()
-  if (!auth.loading && auth.errors.length === 0) {
+  if (auth.success) {
     goto('/')
   }
 }
@@ -39,7 +39,7 @@ onBeforeMount(async () => {
         </InputGroup>
         <Button
           :disabled="auth.loading" :label="$t('login')" severity="contrast" @click="login"
-          :icon="auth.loading ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'" fluid
+          :icon="auth.loading ? 'pi pi-spin pi-spinner' : 'pi pi-sign-in'" fluid outlined
         />
         <Message v-for="error in auth.errors" severity="error">{{ $t(error) }}</Message>
       </div>

@@ -9,6 +9,7 @@ interface AuthState {
   username: string
   password: string
   loading: boolean
+  success: boolean
   errors: string[]
   error: string
   locale: string
@@ -25,6 +26,7 @@ const useAuthStore = defineStore('auth-store', {
     username: '',
     password: '',
     loading: false,
+    success: false,
     errors: [],
     error: '',
     locale: getLocale(),
@@ -86,6 +88,7 @@ const useAuthStore = defineStore('auth-store', {
       } else if (data.value) {
         await cookie.set('username', this.username, { days: 365 })
         await this.setData(data.value)
+        this.success = true
       }
 
       this.loading = false

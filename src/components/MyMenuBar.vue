@@ -28,13 +28,11 @@ const startItems = inject<MenuBarItem[]>('menu-start-items', [])
       </div>
     </template>
     <template #center>
-      <div class="flex items-center gap-2">
-        <Button :label="auth.user.org?.name" severity="secondary" text />
-      </div>
     </template>
     <template #end>
       <div class="flex items-center gap-2">
-        <Button @click="$router.push({name: 'auth.profile'})" :label="auth.user.name" icon="pi pi-user" text severity="contrast" />
+        <Button @click="$router.push({name: 'auth.profile'})" icon="pi pi-user" text severity="contrast"
+         :label="auth.user.org?.name ?? auth.user.name" />
       </div>
     </template>
   </Toolbar>
