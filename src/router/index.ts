@@ -9,6 +9,7 @@ import orgRoutes from './org'
 import roleRoutes from './role'
 import clientTypeRoutes from './client-type'
 import clientRoutes from './client'
+import rateRoutes from './rate'
 import paymentRoutes from './payment'
 import chargeRoutes from './charge'
 import userRoutes from './user'
@@ -26,6 +27,7 @@ const router = createRouter({
     ...roleRoutes,
     ...clientTypeRoutes,
     ...clientRoutes,
+    ...rateRoutes,
     ...paymentRoutes,
     ...chargeRoutes,
     ...userRoutes,

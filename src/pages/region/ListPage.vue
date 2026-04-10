@@ -3,7 +3,6 @@ import { computed, onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useAuthStore, useRegionStore } from '@/stores'
-import MyDataTable from '@/components/MyDataTable.vue'
 import type { ListQuery, Region } from '@/types'
 
 const { t } = useI18n()

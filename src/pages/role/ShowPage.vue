@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { computed, onMounted, provide, ref } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { usePermStore, useRoleStore } from '@/stores'
-import MainLayout from '@/layouts/MainLayout.vue'
 
 const route = useRoute()
 const router = useRouter()

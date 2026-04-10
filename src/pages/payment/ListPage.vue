@@ -6,8 +6,6 @@ import type { ListQuery, Payment } from '@/types'
 import { useAuthStore, usePaymentStore } from '@/stores'
 import { FilterMatchMode } from '@primevue/core/api'
 import { convertFilters, convertSort } from '@/utils'
-import MainLayout from '@/layouts/MainLayout.vue'
-import { month } from '@primeuix/themes/aura/datepicker'
 
 const { t } = useI18n()
 const router = useRouter()
