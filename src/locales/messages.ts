@@ -514,6 +514,58 @@ const messages: Messages = {
     ru: 'Другое',
     en: 'Other',
   },
+  price: {
+    ru: 'Цена',
+    en: 'Price',
+  },
+  type: {
+    ru: 'Тип',
+    en: 'Type',
+  },
+  member: {
+    ru: 'Жилец',
+    en: 'Member',
+  },
+  members: {
+    ru: 'Жильцы',
+    en: 'Residents',
+  },
+  fix: {
+    ru: 'Фикс',
+    en: 'Fix',
+  },
+  actions: {
+    ru: 'Действия',
+    en: 'Actions',
+  },
+  start: {
+    ru: 'Начало',
+    en: 'Start',
+  },
+  end: {
+    ru: 'Конец',
+    en: 'End',
+  },
+  period: {
+    ru: 'Период',
+    en: 'Period',
+  },
+  active: {
+    ru: 'Активный',
+    en: 'Active',
+  },
+  inactive: {
+    ru: 'Неактивный',
+    en: 'Inactive',
+  },
+  msquare: {
+    ru: 'Кв. метр',
+    en: 'Square meter',
+  },
+  fill_required_fields: {
+    ru: 'Заполните все обязательные поля',
+    en: 'Fill all required fields',
+  },
 }
 
 export default messages

@@ -9,12 +9,21 @@ export default [
     },
   },
   {
-    path: '/rate/show/:id',
-    name: 'rate.show',
-    component: () => import('@/pages/rate/ShowPage.vue'),
+    path: '/rate/create',
+    name: 'rate.create',
+    component: () => import('@/pages/rate/CreatePage.vue'),
     meta: {
       auth: true,
-      perm: 'rate.view',
+      perm: 'rate.create',
+    },
+  },
+  {
+    path: '/rate/edit/:id',
+    name: 'rate.edit',
+    component: () => import('@/pages/rate/EditPage.vue'),
+    meta: {
+      auth: true,
+      perm: 'rate.edit',
     },
   },
 ]

@@ -49,6 +49,30 @@ const useRateStore = defineStore(`rate-store`, {
 
       this.loading = false
     },
+    async createItem(data: Omit<Rate, 'id'>) {
+      this.creating = true
+      this.errors = []
+
+      try {
+        this.item = await RateService.createItem(data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.creating = false
+    },
+    async updateItem(id: string, data: Omit<Rate, 'id'>) {
+      this.updating = true
+      this.errors = []
+
+      try {
+        this.item = await RateService.updateItem(id,  data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.updating = false
+    },
     async deleteItem(id: string) {
       this.deleting = true
       this.errors = []
