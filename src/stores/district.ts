@@ -49,6 +49,30 @@ const useDistrictStore = defineStore(`district-store`, {
 
       this.loading = false
     },
+    async createItem(data: Partial<District>) {
+      this.creating = true
+      this.errors = []
+
+      try {
+        this.item = await DistrictService.createItem(data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.creating = false
+    },
+    async updateItem(id: string, data: Partial<District>) {
+      this.updating = true
+      this.errors = []
+
+      try {
+        this.item = await DistrictService.updateItem(id, data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.updating = false
+    },
     async deleteItem(id: string) {
       this.deleting = true
       this.errors = []

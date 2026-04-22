@@ -12,26 +12,35 @@ const router = useRouter()
 const auth = useAuthStore()
 const chargeSt = useChargeStore()
 
-const cm = ref()
 const selectedCharge = ref<Charge>({} as Charge)
-const menuModel = ref([] as any[])
 
-if (auth.hasPerm('charge.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewCharge(selectedCharge) })
-}
-if (auth.hasPerm('charge.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteCharge(selectedCharge) })
-}
+const resolveId = (charge: any) => charge?.value?.id ?? charge?.id
 
-const viewCharge = (charge: any) => {
-  router.push({ name: 'charge.show', params: { id: charge.value.id } })
+const viewCharge = (role: any) => {
+  const id = resolveId(role)
+  if (!id) return
+
+  router.push({ name: 'charge.show', params: { id: id } })
 }
 
-const deleteCharge = async (charge: any) => {
+const createCharge = () => {
+  router.push({ name: 'charge.create' })
+}
+
+const editCharge = (org: any) => {
+  const id = resolveId(org)
+  if (!id) return
+
+  router.push({ name: 'charge.edit', params: { id: id } })
+}
+
+const deleteCharge = async (org: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = charge.value.id
+    const id = resolveId(org)
+    if (!id) return
+
     await chargeSt.deleteItem(id)
-    chargeSt.items.data = await chargeSt.items.data.filter(p => p.id !== id)
+    chargeSt.items.data = chargeSt.items.data.filter(p => p.id !== id)
     clearSelectedCharge()
   }
 }
@@ -51,7 +60,7 @@ async function onPageChange(event: any) {
 }
 
 const menu = ref([
-  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'home' }) },
   { label: t('charges'), disabled: true },
 ])
 
@@ -60,7 +69,7 @@ provide('menu-start-items', menu)
 const filterInitial = {
   account: { value: null, matchMode: FilterMatchMode.STARTS_WITH },
   amount: { value: null, matchMode: FilterMatchMode.EQUALS },
-  status: { value: null, matchMode: FilterMatchMode.EQUALS },
+  source: { value: null, matchMode: FilterMatchMode.EQUALS },
   year: { value: null, matchMode: FilterMatchMode.EQUALS },
   month: { value: null, matchMode: FilterMatchMode.EQUALS },
 }
@@ -82,23 +91,12 @@ const updateSort = async (event: any) => {
   await chargeSt.getItems(query.value)
 }
 
-const statuses = ref([
-  { key: 'failed', name: t('failed') },
-  { key: 'completed', name: t('completed') },
-  { key: 'pending', name: t('pending') },
+const sources = ref([
+  { key: 'rate', name: t('rate') },
+  { key: 'fine', name: t('fine') },
+  { key: 'manual', name: t('manual') },
 ])
-const getSeverity = (status?: string) => {
-  switch (status) {
-    case 'failed':
-      return 'danger';
 
-    case 'completed':
-      return 'success';
-
-    case 'pending':
-      return 'secondary';
-  }
-}
 onMounted(async () => {
   await updateFilter()
 })
@@ -107,29 +105,20 @@ onMounted(async () => {
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedCharge" />
       <MyDataTable :value="chargeSt.items.data" :loading="chargeSt.loading"
                    lazy :first="skip" :rows="take" :totalRecords="chargeSt.items.totalCount"
                    v-model:filters="filters" filterDisplay="row" sortMode="multiple"
                    @update:filters="updateFilter"
                    @update:multiSortMeta="updateSort"
-                   @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedCharge"
-                   @rowContextmenu="cm.show($event.originalEvent)">
-        <template #header>
-          <div class="flex flex-wrap gap-4 items-center justify-between">
-            <div>
-              <Button :label="$t('clear')" icon="pi pi-times" text @click="clearFilters" severity="secondary" />
-            </div>
-            <div></div>
-            <div></div>
-          </div>
-        </template>
+                   @page="onPageChange($event)" @update:rows="take = $event">
         <template #paginatorstart>
           <Button type="button" icon="pi pi-refresh" text @click="chargeSt.getItems(query)" severity="secondary" />
         </template>
         <template #paginatorend>
-          <Button type="button" icon="pi pi-download" text severity="secondary" />
+          <div class="flex flex-wrap gap-2 items-center">
+            <Button type="button" icon="pi pi-download" text severity="secondary" />
+            <Button icon="pi pi-times" text @click="clearFilters" severity="secondary" />
+          </div>
         </template>
         <Column field="account" sortable :header="$t('account')">
           <template #body="{ data }">
@@ -147,7 +136,14 @@ onMounted(async () => {
             <InputNumber v-model="filterModel.value" mode="decimal" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
           </template>
         </Column>
-        <Column field="status" sortable :header="$t('status')">
+        <Column field="source" sortable :header="$t('source')">
+          <template #body="{ data }">
+            {{ $t(data.source) }}
+          </template>
+          <template #filter="{ filterModel, filterCallback }">
+            <Select v-model="filterModel.value" :options="sources" optionLabel="name" optionValue="key"
+                    @change="filterCallback" :placeholder="$t('select')" showClear />
+          </template>
         </Column>
         <Column field="year" sortable :header="$t('year')" data-type="numeric">
           <template #body="{ data }">

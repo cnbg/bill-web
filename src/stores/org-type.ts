@@ -49,6 +49,30 @@ const useOrgTypeStore = defineStore(`orgtype-store`, {
 
       this.loading = false
     },
+    async createItem(data: Partial<OrgType>) {
+      this.creating = true
+      this.errors = []
+
+      try {
+        this.item = await OrgTypeService.createItem(data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.creating = false
+    },
+    async updateItem(id: string, data: Partial<OrgType>) {
+      this.updating = true
+      this.errors = []
+
+      try {
+        this.item = await OrgTypeService.updateItem(id, data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.updating = false
+    },
     async deleteItem(id: string) {
       this.deleting = true
       this.errors = []

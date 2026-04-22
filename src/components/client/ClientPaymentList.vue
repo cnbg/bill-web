@@ -35,7 +35,7 @@ const deletePayment = async (payment: any) => {
   if (confirm(t('are_you_sure'))) {
     const id = payment.value.id
     await paymentSt.deleteItem(id)
-    paymentSt.items.data = await paymentSt.items.data.filter(p => p.id !== id)
+    paymentSt.items.data = paymentSt.items.data.filter(p => p.id !== id)
     clearSelectedPayment()
   }
 }
@@ -92,6 +92,7 @@ const statuses = ref([
   { key: 'completed', name: t('completed') },
   { key: 'pending', name: t('pending') },
 ])
+
 const getSeverity = (status: string) => {
   switch (status) {
     case 'failed':

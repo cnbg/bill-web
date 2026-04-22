@@ -1,4 +1,4 @@
-import { getFetchService, putFetchService, deleteFetchService } from './base'
+import { getFetchService, putFetchService, deleteFetchService, postFetchService } from './base'
 import type { DtItem, ListQuery, Role } from '@/types'
 
 const url = import.meta.env.VITE_API_URL! + '/v1'
@@ -20,6 +20,7 @@ const RoleService = {
       throw error
     }
   },
+
   togglePerm: async (id: string, perm: string, add: boolean): Promise<void> => {
     try {
       await putFetchService(`${url}/${page}/perm/${id}`, { perm, add })
@@ -27,6 +28,23 @@ const RoleService = {
       throw error
     }
   },
+
+  createItem: async (data: Partial<Role>): Promise<Role> => {
+    try {
+      return await postFetchService<Role>(`${url}/${page}/create`, data)
+    } catch (error) {
+      throw error
+    }
+  },
+
+  updateItem: async (id: string, data: Partial<Role>): Promise<Role> => {
+    try {
+      return await putFetchService<Role>(`${url}/${page}/update/${id}`, data)
+    } catch (error) {
+      throw error
+    }
+  },
+
   deleteItem: async (id: string): Promise<Role> => {
     try {
       return await deleteFetchService<Role>(`${url}/${page}/delete/${id}`)

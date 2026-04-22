@@ -13,26 +13,35 @@ const auth = useAuthStore()
 const clientSt = useClientStore()
 const clientTypeSt = useClientTypeStore()
 
-const cm = ref()
 const selectedClient = ref<Client>({} as Client)
-const menuModel = ref([] as any[])
 
-if (auth.hasPerm('client.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewClient(selectedClient) })
-}
-if (auth.hasPerm('client.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteClient(selectedClient) })
-}
+const resolveId = (client: any) => client?.value?.id ?? client?.id
 
-const viewClient = (client: any) => {
-  router.push({ name: 'client.show', params: { id: client.value.id } })
+const viewClient = (role: any) => {
+  const id = resolveId(role)
+  if (!id) return
+
+  router.push({ name: 'client.show', params: { id: id } })
 }
 
-const deleteClient = async (client: any) => {
+const createClient = () => {
+  router.push({ name: 'client.create' })
+}
+
+const editClient = (org: any) => {
+  const id = resolveId(org)
+  if (!id) return
+
+  router.push({ name: 'client.edit', params: { id: id } })
+}
+
+const deleteClient = async (org: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = client.value.id
+    const id = resolveId(org)
+    if (!id) return
+
     await clientSt.deleteItem(id)
-    clientSt.items.data = await clientSt.items.data.filter(p => p.id !== id)
+    clientSt.items.data = clientSt.items.data.filter(p => p.id !== id)
     clearSelectedClient()
   }
 }
@@ -52,7 +61,7 @@ async function onPageChange(event: any) {
 }
 
 const menu = ref([
-  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'home' }) },
   { label: t('clients'), disabled: true },
 ])
 
@@ -89,22 +98,19 @@ const updateSort = async (event: any) => {
 
 onMounted(async () => {
   await clientTypeSt.getItems({ take: 1000, skip: 0 })
-  await updateFilter()  
+  await updateFilter()
 })
 </script>
 
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedClient" />
       <MyDataTable :value="clientSt.items.data" :loading="clientSt.loading"
                    lazy :first="skip" :rows="take" :totalRecords="clientSt.items.totalCount"
                    v-model:filters="filters" filterDisplay="row" sortMode="multiple"
                    @update:filters="updateFilter"
                    @update:multiSortMeta="updateSort"
-                   @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedClient"
-                   @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">
+                   @page="onPageChange($event)" @update:rows="take = $event">
         <template #header>
           <div class="flex flex-wrap gap-4 items-center justify-between">
             <div>
@@ -194,6 +200,19 @@ onMounted(async () => {
           </template>
           <template #filter="{ filterModel, filterCallback }">
             <InputText v-model="filterModel.value" type="text" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+          </template>
+        </Column>
+        <Column v-if="auth.hasPerm('client.create', 'client.edit', 'client.delete')" style="width: 8rem">
+          <template #header="data">
+            <Button v-if="auth.hasPerm('client.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createClient()" />
+            <span v-else>{{ $t('actions') }}</span>
+          </template>
+          <template #body="{ data }">
+            <div class="flex gap-2">
+              <Button v-if="auth.hasPerm('client.view')" type="button" icon="pi pi-eye" text severity="secondary" @click="viewClient(data)" />
+              <Button v-if="auth.hasPerm('client.edit')" type="button" icon="pi pi-pencil" text severity="secondary" @click="editClient(data)" />
+              <Button v-if="auth.hasPerm('client.delete')" type="button" icon="pi pi-trash" text severity="danger" @click="deleteClient(data)" />
+            </div>
           </template>
         </Column>
       </MyDataTable>

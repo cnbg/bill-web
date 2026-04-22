@@ -3,6 +3,7 @@ import { onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useOrgTypeStore } from '@/stores'
+import MainLayout from '@/layouts/MainLayout.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -19,14 +20,16 @@ provide('menu-start-items', menu)
 
 onMounted(async () => {
   await orgTypeSt.getItem(orgTypeId)
-  menu.value.push({ label: orgTypeSt.item.name, disabled: true })
+  menu.value.push({ label: '', disabled: true })
 })
 </script>
 
 <template>
   <MainLayout>
     <div class="card mt-5">
-      {{ orgTypeSt.item.name }}
+      <div class="card-header">
+        {{ orgTypeSt.item.name }}
+      </div>
     </div>
   </MainLayout>
 </template>

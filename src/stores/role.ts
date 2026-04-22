@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
-import type { ListQuery, Role } from '@/types'
+import type { DtItem, ListQuery, Role } from '@/types'
 import { RoleService } from '@/services'
-import type { DtItem } from '@/types'
 
 interface RoleState {
   items: DtItem<Role>
@@ -68,6 +67,30 @@ const useRoleStore = defineStore(`role-store`, {
       } catch (error) {
         console.log(error)
         this.errors.push(error instanceof Error ? error.message : 'error_updating_data')
+      }
+
+      this.updating = false
+    },
+    async createItem(data: Partial<Role>) {
+      this.creating = true
+      this.errors = []
+
+      try {
+        this.item = await RoleService.createItem(data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
+      }
+
+      this.creating = false
+    },
+    async updateItem(id: string, data: Partial<Role>) {
+      this.updating = true
+      this.errors = []
+
+      try {
+        this.item = await RoleService.updateItem(id, data)
+      } catch (error) {
+        this.errors.push(error instanceof Error ? error.message : 'error_saving_data')
       }
 
       this.updating = false

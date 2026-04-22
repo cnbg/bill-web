@@ -51,7 +51,7 @@ async function onPageChange(event: any) {
 }
 
 const menu = ref([
-  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'home' }) },
   { label: t('users'), disabled: true },
 ])
 

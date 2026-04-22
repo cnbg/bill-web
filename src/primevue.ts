@@ -4,6 +4,7 @@ import 'primeicons/primeicons.css'
 
 import PrimeVue from 'primevue/config'
 import Aura from '@primeuix/themes/aura'
+import KeyFilter from 'primevue/keyfilter'
 import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
 import Ripple from 'primevue/ripple'
@@ -20,11 +21,13 @@ import Avatar from 'primevue/avatar'
 import Badge from 'primevue/badge'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
+import Checkbox from 'primevue/checkbox'
 import Column from 'primevue/column'
 import ColumnGroup from 'primevue/columngroup'
 import ConfirmDialog from 'primevue/confirmdialog'
 import ContextMenu from 'primevue/contextmenu'
 import DataTable from 'primevue/datatable'
+import Editor from 'primevue/editor'
 import InputGroup from 'primevue/inputgroup'
 import InputGroupAddon from 'primevue/inputgroupaddon'
 import InputText from 'primevue/inputtext'
@@ -52,6 +55,7 @@ app.use(ToastService)
 app.use(DialogService)
 app.use(ConfirmationService)
 
+app.directive('keyfilter', KeyFilter)
 app.directive('ripple', Ripple)
 app.directive('tooltip', Tooltip)
 app.directive('focustrap', FocusTrap)
@@ -65,11 +69,13 @@ app.component('Avatar', Avatar)
 app.component('Badge', Badge)
 app.component('Button', Button)
 app.component('Card', Card)
+app.component('Checkbox', Checkbox)
 app.component('Column', Column)
 app.component('ColumnGroup', ColumnGroup)
 app.component('ConfirmDialog', ConfirmDialog)
 app.component('ContextMenu', ContextMenu)
 app.component('DataTable', DataTable)
+app.component('Editor', Editor)
 app.component('InputGroup', InputGroup)
 app.component('InputGroupAddon', InputGroupAddon)
 app.component('InputText', InputText)

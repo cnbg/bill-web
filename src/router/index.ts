@@ -12,7 +12,10 @@ import clientRoutes from './client'
 import rateRoutes from './rate'
 import paymentRoutes from './payment'
 import chargeRoutes from './charge'
+import expenseRoutes from './expense'
+import balanceRoutes from './balance'
 import userRoutes from './user'
+import articleRoutes from './article'
 import errorRoutes from './error'
 
 const router = createRouter({
@@ -30,7 +33,10 @@ const router = createRouter({
     ...rateRoutes,
     ...paymentRoutes,
     ...chargeRoutes,
+    ...expenseRoutes,
+    ...balanceRoutes,
     ...userRoutes,
+    ...articleRoutes,
     ...errorRoutes,
   ],
 })

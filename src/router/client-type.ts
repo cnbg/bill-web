@@ -17,4 +17,22 @@ export default [
       perm: 'client-type.view',
     },
   },
+  {
+    path: '/client-type/create',
+    name: 'client-type.create',
+    component: () => import('@/pages/client-type/CreatePage.vue'),
+    meta: {
+      auth: true,
+      perm: 'client-type.create',
+    },
+  },
+  {
+    path: '/client-type/edit/:id',
+    name: 'client-type.edit',
+    component: () => import('@/pages/client-type/EditPage.vue'),
+    meta: {
+      auth: true,
+      perm: 'client-type.edit',
+    },
+  },
 ]

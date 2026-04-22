@@ -1,5 +1,5 @@
-import { deleteFetchService, getFetchService, postFetchService } from './base'
-import type { DtItem, ListQuery, Rate } from '@/types'
+import { deleteFetchService, getFetchService, postFetchService, putFetchService } from './base'
+import type { DtItem, ListQuery, Rate, Role } from '@/types'
 
 const url = import.meta.env.VITE_API_URL! + '/v1'
 const page = 'rate'
@@ -21,7 +21,7 @@ const RateService = {
     }
   },
 
-  createItem: async (data: Omit<Rate, 'id'>): Promise<Rate> => {
+  createItem: async (data: Partial<Rate>): Promise<Rate> => {
     try {
       return await postFetchService<Rate>(`${url}/${page}/create`, data)
     } catch (error) {
@@ -29,9 +29,9 @@ const RateService = {
     }
   },
 
-  updateItem: async (id: string, data: Omit<Rate, 'id'>, ): Promise<Rate> => {
+  updateItem: async (id: string, data: Partial<Rate>): Promise<Rate> => {
     try {
-      return await postFetchService<Rate>(`${url}/${page}/update/${id}`, data)
+      return await putFetchService<Rate>(`${url}/${page}/update/${id}`, data)
     } catch (error) {
       throw error
     }

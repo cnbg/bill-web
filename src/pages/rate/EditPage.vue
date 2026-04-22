@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, provide, reactive, ref } from 'vue'
+import { onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRoute, useRouter } from 'vue-router'
 import { useRateStore } from '@/stores'
 import type { Rate } from '@/types'
-import RateForm from '@/pages/rate/RateForm.vue'
-import MainLayout from '@/layouts/MainLayout.vue'
+import EditForm from '@/pages/rate/EditForm.vue'
 
 const { t } = useI18n()
 const route = useRoute()
@@ -14,7 +13,7 @@ const rateId = route.params.id as string
 
 const rateSt = useRateStore()
 
-const handleSubmit = async (data: Rate) => {
+const handleSubmit = async (data: Partial<Rate>) => {
   try {
     await rateSt.updateItem(rateId, data)
     await router.push({ name: 'rate.list' })
@@ -37,7 +36,7 @@ onMounted(async () => {
 
 <template>
   <MainLayout>
-    <RateForm @submit="handleSubmit" />
+    <EditForm @submit="handleSubmit" />
   </MainLayout>
 </template>
 

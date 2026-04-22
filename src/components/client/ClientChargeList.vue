@@ -7,8 +7,8 @@ import { computed, onMounted, provide, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 
-const props =defineProps({
-  account: { type: String, required: true }
+const props = defineProps({
+  account: { type: String, required: true },
 })
 
 const { t } = useI18n()
@@ -63,8 +63,8 @@ provide('menu-start-items', menu)
 
 const filterInitial = {
   account: { value: props.account, matchMode: FilterMatchMode.EQUALS },
+  source: { value: null, matchMode: FilterMatchMode.EQUALS },
   amount: { value: null, matchMode: FilterMatchMode.EQUALS },
-  status: { value: null, matchMode: FilterMatchMode.EQUALS },
   year: { value: null, matchMode: FilterMatchMode.EQUALS },
   month: { value: null, matchMode: FilterMatchMode.EQUALS },
 }
@@ -86,6 +86,12 @@ const updateSort = async (event: any) => {
   await chargeSt.getItems(query.value)
 }
 
+const sources = ref([
+  { key: 'rate', name: t('rate') },
+  { key: 'fine', name: t('fine') },
+  { key: 'manual', name: t('manual') },
+])
+
 const statuses = ref([
   { key: 'failed', name: t('failed') },
   { key: 'completed', name: t('completed') },
@@ -94,13 +100,13 @@ const statuses = ref([
 const getSeverity = (status?: string) => {
   switch (status) {
     case 'failed':
-      return 'danger';
+      return 'danger'
 
     case 'completed':
-      return 'success';
+      return 'success'
 
     case 'pending':
-      return 'secondary';
+      return 'secondary'
   }
 }
 onMounted(async () => {
@@ -109,65 +115,72 @@ onMounted(async () => {
 </script>
 
 <template>
-<ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedCharge" />
-<MyDataTable :value="chargeSt.items.data" :loading="chargeSt.loading"
-              lazy :first="skip" :rows="take" :totalRecords="chargeSt.items.totalCount"
-              v-model:filters="filters" filterDisplay="row" sortMode="multiple"
-              @update:filters="updateFilter"
-              @update:multiSortMeta="updateSort"
-              @page="onPageChange($event)" @update:rows="take = $event"
-              contextMenu v-model:contextMenuSelection="selectedCharge"
-              @rowContextmenu="cm.show($event.originalEvent)">
-  <template #header>
-    <div class="flex flex-wrap gap-4 items-center justify-between">
-      <div>
-        <Button :label="$t('clear')" icon="pi pi-times" text @click="clearFilters" severity="secondary" />
+  <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedCharge" />
+  <MyDataTable :value="chargeSt.items.data" :loading="chargeSt.loading"
+               lazy :first="skip" :rows="take" :totalRecords="chargeSt.items.totalCount"
+               v-model:filters="filters" filterDisplay="row" sortMode="multiple"
+               @update:filters="updateFilter"
+               @update:multiSortMeta="updateSort"
+               @page="onPageChange($event)" @update:rows="take = $event"
+               contextMenu v-model:contextMenuSelection="selectedCharge"
+               @rowContextmenu="cm.show($event.originalEvent)">
+    <template #header>
+      <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div>
+          <Button :label="$t('clear')" icon="pi pi-times" text @click="clearFilters" severity="secondary" />
+        </div>
+        <div></div>
+        <div></div>
       </div>
-      <div></div>
-      <div></div>
-    </div>
-  </template>
-  <template #paginatorstart>
-    <Button type="button" icon="pi pi-refresh" text @click="chargeSt.getItems(query)" severity="secondary" />
-  </template>
-  <template #paginatorend>
-    <Button type="button" icon="pi pi-download" text severity="secondary" />
-  </template>
-  <Column field="account" sortable :header="$t('account')" hidden>
-    <template #body="{ data }">
-      {{ data.account }}
     </template>
-    <template #filter="{ filterModel, filterCallback }">
-      <InputText v-model="filterModel.value" type="text" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+    <template #paginatorstart>
+      <Button type="button" icon="pi pi-refresh" text @click="chargeSt.getItems(query)" severity="secondary" />
     </template>
-  </Column>
-  <Column field="amount" sortable dataType="numeric" :header="$t('amount')">
-    <template #body="{ data }">
-      {{ data.amount }}
+    <template #paginatorend>
+      <Button type="button" icon="pi pi-download" text severity="secondary" />
     </template>
-    <template #filter="{ filterModel, filterCallback }">
-      <InputNumber v-model="filterModel.value" mode="decimal" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
-    </template>
-  </Column>
-  <Column field="status" sortable :header="$t('status')">
-  </Column>
-  <Column field="year" sortable :header="$t('year')" data-type="numeric">
-    <template #body="{ data }">
-      {{ data.year }}
-    </template>
-    <template #filter="{ filterModel, filterCallback }">
-      <InputNumber v-model="filterModel.value" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
-    </template>
-  </Column>
-  <Column field="month" sortable :header="$t('month')" data-type="numeric">
-    <template #body="{ data }">
-      {{ data.month }}
-    </template>
-    <template #filter="{ filterModel, filterCallback }">
-      <InputNumber v-model="filterModel.value" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
-    </template>
-  </Column>
-</MyDataTable>
+    <Column field="account" sortable :header="$t('account')" hidden>
+      <template #body="{ data }">
+        {{ data.account }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+      </template>
+    </Column>
+    <Column field="amount" sortable dataType="numeric" :header="$t('amount')">
+      <template #body="{ data }">
+        {{ data.amount }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputNumber v-model="filterModel.value" mode="decimal" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+      </template>
+    </Column>
+    <Column field="source" sortable :header="$t('source')">
+      <template #body="{ data }">
+        {{ $t(data.source) }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <Select v-model="filterModel.value" :options="sources" optionLabel="name" optionValue="key"
+                @change="filterCallback" :placeholder="$t('select')" showClear />
+      </template>
+    </Column>
+    <Column field="year" sortable :header="$t('year')" data-type="numeric">
+      <template #body="{ data }">
+        {{ data.year }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputNumber v-model="filterModel.value" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+      </template>
+    </Column>
+    <Column field="month" sortable :header="$t('month')" data-type="numeric">
+      <template #body="{ data }">
+        {{ data.month }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputNumber v-model="filterModel.value" @keyup.enter="filterCallback()" :placeholder="$t('search')+'...'" />
+      </template>
+    </Column>
+  </MyDataTable>
 </template>
 
 <style>

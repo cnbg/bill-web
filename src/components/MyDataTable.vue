@@ -6,9 +6,6 @@
              paginator :rows="20" :rowsPerPageOptions="[10, 20, 50, 100]" tableStyle="min-width: 20px"
              paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
              currentPageReportTemplate="{first} to {last} of {totalRecords}" removableSort>
-    <template #header>
-      <slot name="header" />
-    </template>
     <template #paginatorstart>
       <slot name="paginatorstart" />
     </template>

@@ -19,7 +19,7 @@ provide('menu-start-items', menu)
 
 onMounted(async () => {
   await orgSt.getItem(orgId)
-  menu.value.push({ label: orgSt.item.name, disabled: true })
+  menu.value.push({ label: '', disabled: true })
 })
 </script>
 

@@ -17,4 +17,22 @@ export default [
       perm: 'role.view',
     },
   },
+  {
+    path: '/role/create',
+    name: 'role.create',
+    component: () => import('@/pages/role/CreatePage.vue'),
+    meta: {
+      auth: true,
+      perm: 'role.create',
+    },
+  },
+  {
+    path: '/role/edit/:id',
+    name: 'role.edit',
+    component: () => import('@/pages/role/EditPage.vue'),
+    meta: {
+      auth: true,
+      perm: 'role.edit',
+    },
+  },
 ]

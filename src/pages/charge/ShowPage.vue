@@ -17,7 +17,7 @@ provide('menu-start-items', menu)
 
 onMounted(async () => {
   await chargeSt.getItem(chargeId)
-  menu.value.push({ label: chargeSt.item.account, disabled: true })
+  menu.value.push({ label: '', disabled: true })
 })
 </script>
 

@@ -19,7 +19,7 @@ provide('menu-start-items', menu)
 
 onMounted(async () => {
   await districtSt.getItem(districtId)
-  menu.value.push({ label: districtSt.item.name, disabled: true })
+  menu.value.push({ label: '', disabled: true })
 })
 </script>
 

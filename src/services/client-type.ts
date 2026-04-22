@@ -1,4 +1,4 @@
-import { deleteFetchService, getFetchService } from './base'
+import { deleteFetchService, getFetchService, postFetchService, putFetchService } from './base'
 import type { DtItem, ListQuery, ClientType } from '@/types'
 
 const url = import.meta.env.VITE_API_URL! + '/v1'
@@ -20,6 +20,23 @@ const ClientTypeService = {
       throw error
     }
   },
+
+  createItem: async (data: Partial<ClientType>): Promise<ClientType> => {
+    try {
+      return await postFetchService<ClientType>(`${url}/${page}/create`, data)
+    } catch (error) {
+      throw error
+    }
+  },
+
+  updateItem: async (id: string, data: Partial<ClientType>): Promise<ClientType> => {
+    try {
+      return await putFetchService<ClientType>(`${url}/${page}/update/${id}`, data)
+    } catch (error) {
+      throw error
+    }
+  },
+
 
   deleteItem: async (id: string): Promise<ClientType> => {
     try {

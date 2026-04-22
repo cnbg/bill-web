@@ -10,26 +10,35 @@ const router = useRouter()
 const auth = useAuthStore()
 const orgTypeSt = useOrgTypeStore()
 
-const cm = ref()
 const selectedOrgType = ref<OrgType>({} as OrgType)
-const menuModel = ref([] as any[])
 
-if (auth.hasPerm('org-type.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewOrgType(selectedOrgType) })
-}
-if (auth.hasPerm('org-type.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteOrgType(selectedOrgType) })
+const resolveOrgTypeId = (orgType: any) => orgType?.value?.id ?? orgType?.id
+
+const viewOrgType = (role: any) => {
+  const id = resolveOrgTypeId(role)
+  if (!id) return
+
+  router.push({ name: 'org-type.show', params: { id: id } })
 }
 
-const viewOrgType = (orgType: any) => {
-  router.push({ name: 'org-type.show', params: { id: orgType.value.id } })
+const createOrgType = () => {
+  router.push({ name: 'org-type.create' })
+}
+
+const editOrgType = (orgType: any) => {
+  const id = resolveOrgTypeId(orgType)
+  if (!id) return
+
+  router.push({ name: 'org-type.edit', params: { id: id } })
 }
 
 const deleteOrgType = async (orgType: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = orgType.value.id
+    const id = resolveOrgTypeId(orgType)
+    if (!id) return
+
     await orgTypeSt.deleteItem(id)
-    orgTypeSt.items.data = await orgTypeSt.items.data.filter(p => p.id !== id)
+    orgTypeSt.items.data = orgTypeSt.items.data.filter(p => p.id !== id)
     clearSelectedOrgType()
   }
 }
@@ -49,7 +58,7 @@ async function onPageChange(event: any) {
 }
 
 const menu = ref([
-  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'home' }) },
   { label: t('org_types'), disabled: true },
 ])
 
@@ -63,19 +72,34 @@ onMounted(async () => {
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedOrgType" />
       <MyDataTable :value="orgTypeSt.items.data" :loading="orgTypeSt.loading"
                    lazy :first="skip" :rows="take" :totalRecords="orgTypeSt.items.totalCount"
-                   @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedOrgType"
-                   @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">
+                   @page="onPageChange($event)" @update:rows="take = $event">
         <template #paginatorstart>
           <Button type="button" icon="pi pi-refresh" text @click="orgTypeSt.getItems(query)" severity="secondary" />
         </template>
         <template #paginatorend>
           <Button type="button" icon="pi pi-download" text severity="secondary" />
         </template>
+        <Column field="isActive" :header="$t('active')" style="width: 9rem;">
+          <template #body="{ data }">
+            <i :class="['pi', data.isActive ? 'pi-check text-green-600' : 'pi-minus text-gray-300']" />
+          </template>
+        </Column>
         <Column field="name" :header="$t('title')" />
+        <Column v-if="auth.hasPerm('org-type.create', 'org-type.edit', 'org-type.delete')" style="width: 8rem">
+          <template #header="data">
+            <Button v-if="auth.hasPerm('org-type.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createOrgType()" />
+            <span v-else>{{ $t('actions') }}</span>
+          </template>
+          <template #body="{ data }">
+            <div class="flex gap-2">
+              <Button v-if="auth.hasPerm('org-type.view')" type="button" icon="pi pi-eye" text severity="secondary" @click="viewOrgType(data)" />
+              <Button v-if="auth.hasPerm('org-type.edit')" type="button" icon="pi pi-pencil" text severity="secondary" @click="editOrgType(data)" />
+              <Button v-if="auth.hasPerm('org-type.delete')" type="button" icon="pi pi-trash" text severity="danger" @click="deleteOrgType(data)" />
+            </div>
+          </template>
+        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

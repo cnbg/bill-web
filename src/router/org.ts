@@ -17,4 +17,22 @@ export default [
       perm: 'org.view',
     },
   },
+  {
+    path: '/org/create',
+    name: 'org.create',
+    component: () => import('@/pages/org/CreatePage.vue'),
+    meta: {
+      auth: true,
+      perm: 'org.create',
+    },
+  },
+  {
+    path: '/org/edit/:id',
+    name: 'org.edit',
+    component: () => import('@/pages/org/EditPage.vue'),
+    meta: {
+      auth: true,
+      perm: 'org.edit',
+    },
+  },
 ]

@@ -10,26 +10,35 @@ const router = useRouter()
 const auth = useAuthStore()
 const regionSt = useRegionStore()
 
-const cm = ref()
 const selectedRegion = ref<Region>({} as Region)
-const menuModel = ref([] as any[])
 
-if (auth.hasPerm('region.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewRegion(selectedRegion) })
-}
-if (auth.hasPerm('region.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteRegion(selectedRegion) })
-}
+const resolveId = (region: any) => region?.value?.id ?? region?.id
 
-const viewRegion = (region: any) => {
-  router.push({ name: 'region.show', params: { id: region.value.id } })
+const viewRegion = (role: any) => {
+  const id = resolveId(role)
+  if (!id) return
+
+  router.push({ name: 'region.show', params: { id: id } })
 }
 
-const deleteRegion = async (region: any) => {
+const createRegion = () => {
+  router.push({ name: 'region.create' })
+}
+
+const editRegion = (org: any) => {
+  const id = resolveId(org)
+  if (!id) return
+
+  router.push({ name: 'region.edit', params: { id: id } })
+}
+
+const deleteRegion = async (org: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = region.value.id
+    const id = resolveId(org)
+    if (!id) return
+
     await regionSt.deleteItem(id)
-    regionSt.items.data = await regionSt.items.data.filter(p => p.id !== id)
+    regionSt.items.data = regionSt.items.data.filter(p => p.id !== id)
     clearSelectedRegion()
   }
 }
@@ -63,19 +72,29 @@ onMounted(async () => {
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedRegion" />
       <MyDataTable :value="regionSt.items.data" :loading="regionSt.loading"
                    lazy :first="skip" :rows="take" :totalRecords="regionSt.items.totalCount"
-                   @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedRegion"
-                   @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">
+                   @page="onPageChange($event)" @update:rows="take = $event">
         <template #paginatorstart>
           <Button type="button" icon="pi pi-refresh" text @click="regionSt.getItems(query)" severity="secondary" />
         </template>
         <template #paginatorend>
           <Button type="button" icon="pi pi-download" text severity="secondary" />
         </template>
+        <Column field="code" :header="$t('code')" />
         <Column field="name" :header="$t('title')" />
+        <Column v-if="auth.hasPerm('region.create', 'region.edit', 'region.delete')" style="width: 8rem">
+          <template #header="data">
+            <Button v-if="auth.hasPerm('region.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createRegion()" />
+            <span v-else>{{ $t('actions') }}</span>
+          </template>
+          <template #body="{ data }">
+            <div class="flex gap-2">
+              <Button v-if="auth.hasPerm('region.edit')" type="button" icon="pi pi-pencil" text severity="secondary" @click="editRegion(data)" />
+              <Button v-if="auth.hasPerm('region.delete')" type="button" icon="pi pi-trash" text severity="danger" @click="deleteRegion(data)" />
+            </div>
+          </template>
+        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

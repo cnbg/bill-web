@@ -4,16 +4,15 @@ import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
 import { useRateStore } from '@/stores'
 import type { Rate } from '@/types'
-import RateForm from '@/pages/rate/RateForm.vue'
+import RateForm from '@/pages/rate/EditForm.vue'
 import MainLayout from '@/layouts/MainLayout.vue'
-import dayjs from 'dayjs'
 
 const { t } = useI18n()
 const router = useRouter()
 
 const rateSt = useRateStore()
 
-const handleSubmit = async (data: Omit<Rate, 'id'>) => {
+const handleSubmit = async (data: Partial<Rate>) => {
   try {
     await rateSt.createItem(data)
     await router.push({ name: 'rate.list' })
@@ -22,14 +21,15 @@ const handleSubmit = async (data: Omit<Rate, 'id'>) => {
   }
 }
 
-const rate = {
+rateSt.item = {
+  id: '',
   name: '',
-  type: 'fix',
-  price: null as number | null,
+  price: 0,
+  type: '',
   note: '',
-  startDate: dayjs().format('YYYY-MM-DD'),
-  endDate: '',
   isActive: true,
+  startDate: '',
+  endDate: ''
 }
 
 const menu = ref([
@@ -39,14 +39,13 @@ const menu = ref([
 provide('menu-start-items', menu)
 
 onMounted(async () => {
-  rateSt.item = {} as Rate
   menu.value.push({ label: t('create'), disabled: true })
 })
 </script>
 
 <template>
   <MainLayout>
-    <RateForm @submit="handleSubmit" :rate="rateSt.item" />
+    <RateForm @submit="handleSubmit" />
   </MainLayout>
 </template>
 

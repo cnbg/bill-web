@@ -10,26 +10,35 @@ const router = useRouter()
 const auth = useAuthStore()
 const districtSt = useDistrictStore()
 
-const cm = ref()
 const selectedDistrict = ref<District>({} as District)
-const menuModel = ref([] as any[])
 
-if (auth.hasPerm('district.view')) {
-  menuModel.value.push({ label: t('view'), icon: 'pi pi-fw pi-eye', command: () => viewDistrict(selectedDistrict) })
-}
-if (auth.hasPerm('district.delete')) {
-  menuModel.value.push({ label: t('delete'), icon: 'pi pi-fw pi-times', command: () => deleteDistrict(selectedDistrict) })
-}
+const resolveId = (district: any) => district?.value?.id ?? district?.id
 
-const viewDistrict = (district: any) => {
-  router.push({ name: 'district.show', params: { id: district.value.id } })
+const viewDistrict = (role: any) => {
+  const id = resolveId(role)
+  if (!id) return
+
+  router.push({ name: 'district.show', params: { id: id } })
 }
 
-const deleteDistrict = async (district: any) => {
+const createDistrict = () => {
+  router.push({ name: 'district.create' })
+}
+
+const editDistrict = (org: any) => {
+  const id = resolveId(org)
+  if (!id) return
+
+  router.push({ name: 'district.edit', params: { id: id } })
+}
+
+const deleteDistrict = async (org: any) => {
   if (confirm(t('are_you_sure'))) {
-    const id = district.value.id
+    const id = resolveId(org)
+    if (!id) return
+
     await districtSt.deleteItem(id)
-    districtSt.items.data = await districtSt.items.data.filter(p => p.id !== id)
+    districtSt.items.data = districtSt.items.data.filter(p => p.id !== id)
     clearSelectedDistrict()
   }
 }
@@ -49,7 +58,7 @@ async function onPageChange(event: any) {
 }
 
 const menu = ref([
-  { icon: 'pi pi-home', command: () => router.push({ name: 'home' }) },
+  { icon: 'pi pi-chevron-left', command: () => router.push({ name: 'home' }) },
   { label: t('districts'), disabled: true },
 ])
 
@@ -63,12 +72,9 @@ onMounted(async () => {
 <template>
   <MainLayout>
     <div class="card mt-5">
-      <ContextMenu ref="cm" :model="menuModel" @hide="clearSelectedDistrict" />
       <MyDataTable :value="districtSt.items.data" :loading="districtSt.loading"
                    lazy :first="skip" :rows="take" :totalRecords="districtSt.items.totalCount"
-                   @page="onPageChange($event)" @update:rows="take = $event"
-                   contextMenu v-model:contextMenuSelection="selectedDistrict"
-                   @rowContextmenu="cm.show(menuModel.length > 0 ? $event.originalEvent : null)">
+                   @page="onPageChange($event)" @update:rows="take = $event">
         <template #paginatorstart>
           <Button type="button" icon="pi pi-refresh" text @click="districtSt.getItems(query)" severity="secondary" />
         </template>
@@ -76,7 +82,20 @@ onMounted(async () => {
           <Button type="button" icon="pi pi-download" text severity="secondary" />
         </template>
         <Column field="region.name" :header="$t('region')" />
-        <Column field="name" :header="$t('district')" />
+        <Column field="code" :header="$t('code')" />
+        <Column field="name" :header="$t('title')" />
+        <Column v-if="auth.hasPerm('district.create', 'district.edit', 'district.delete')" style="width: 8rem">
+          <template #header="data">
+            <Button v-if="auth.hasPerm('district.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createDistrict()" />
+            <span v-else>{{ $t('actions') }}</span>
+          </template>
+          <template #body="{ data }">
+            <div class="flex gap-2">
+              <Button v-if="auth.hasPerm('district.edit')" type="button" icon="pi pi-pencil" text severity="secondary" @click="editDistrict(data)" />
+              <Button v-if="auth.hasPerm('district.delete')" type="button" icon="pi pi-trash" text severity="danger" @click="deleteDistrict(data)" />
+            </div>
+          </template>
+        </Column>
       </MyDataTable>
     </div>
   </MainLayout>

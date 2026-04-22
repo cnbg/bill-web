@@ -566,6 +566,30 @@ const messages: Messages = {
     ru: 'Заполните все обязательные поля',
     en: 'Fill all required fields',
   },
+  inn: {
+    ru: 'ИНН',
+    en: 'INN',
+  },
+  okpo: {
+    ru: 'ОКПО',
+    en: 'OKPO',
+  },
+  code: {
+    ru: 'Код',
+    en: 'Code',
+  },
+  manual: {
+    ru: 'В ручную',
+    en: 'Manual',
+  },
+  start_balance: {
+    ru: 'Сальдо на начало мес.',
+    en: 'Start balance',
+  },
+  end_balance: {
+    ru: 'Сальдо на конец мес.',
+    en: 'End balance',
+  }
 }
 
 export default messages

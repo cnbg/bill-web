@@ -5,8 +5,6 @@ import { useRouter } from 'vue-router'
 import { useAuthStore, useRateStore } from '@/stores'
 import type { ListQuery, Rate } from '@/types'
 import dayjs from 'dayjs'
-import MainLayout from '@/layouts/MainLayout.vue'
-import MyDataTable from '@/components/MyDataTable.vue'
 
 const { t } = useI18n()
 const router = useRouter()
@@ -93,14 +91,10 @@ onMounted(async () => {
             {{ data.endDate ? dayjs(data.endDate).format('DD-MM-YYYY') : '' }}
           </template>
         </Column>
-        <Column field="isActive" :header="$t('active')">
-          <template #body="{ data }">
-            <Button :icon="data.isActive ? 'pi pi-check' : 'pi pi-minus'" :severity="data.isActive ? 'success' : 'secondary'" text  />
-          </template>
-        </Column>
+        <Column field="note" :header="$t('note')" />
         <Column v-if="auth.hasPerm('rate.create', 'rate.edit', 'rate.delete')" style="width: 8rem">
           <template #header="data">
-            <Button v-if="auth.hasPerm('rate.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createRate(data)" />
+            <Button v-if="auth.hasPerm('rate.create')" type="button" icon="pi pi-plus" text severity="secondary" @click="createRate()" />
             <span v-else>{{ $t('actions') }}</span>
           </template>
           <template #body="{ data }">

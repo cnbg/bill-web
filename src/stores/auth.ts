@@ -145,7 +145,7 @@ const useAuthStore = defineStore('auth-store', {
       this.errors = []
 
       if (save) {
-        const { data, error } = await useAuthHttp<LoginResponse>(baseUrl + '/auth/update').put({ org_id: org.id }).json()
+        const { data, error } = await useAuthHttp<LoginResponse>(baseUrl + '/auth/update').put({ orgId: org.id }).json()
 
         if (error.value) {
           this.errors.push(error.value.message || 'error_fetching_data')

@@ -17,4 +17,22 @@ export default [
       perm: 'region.view',
     },
   },
+  {
+    path: '/region/create',
+    name: 'region.create',
+    component: () => import('@/pages/region/CreatePage.vue'),
+    meta: {
+      auth: true,
+      perm: 'region.create',
+    },
+  },
+  {
+    path: '/region/edit/:id',
+    name: 'region.edit',
+    component: () => import('@/pages/region/EditPage.vue'),
+    meta: {
+      auth: true,
+      perm: 'region.edit',
+    },
+  },
 ]

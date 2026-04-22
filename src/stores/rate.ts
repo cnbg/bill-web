@@ -49,7 +49,7 @@ const useRateStore = defineStore(`rate-store`, {
 
       this.loading = false
     },
-    async createItem(data: Omit<Rate, 'id'>) {
+    async createItem(data: Partial<Rate>) {
       this.creating = true
       this.errors = []
 
@@ -61,7 +61,7 @@ const useRateStore = defineStore(`rate-store`, {
 
       this.creating = false
     },
-    async updateItem(id: string, data: Omit<Rate, 'id'>) {
+    async updateItem(id: string, data: Partial<Rate>) {
       this.updating = true
       this.errors = []
 
